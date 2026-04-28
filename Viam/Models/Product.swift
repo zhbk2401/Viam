@@ -10,7 +10,7 @@ final class Product: Identifiable {
     var price: Double
     var category: Category
     var features: [Feature]
-    var imageData: Data?
+    var imagesData: [Data]
     
     init(
         name: String,
@@ -18,21 +18,20 @@ final class Product: Identifiable {
         price: Double,
         category: Category,
         features: [Feature] = [],
-        imageData: Data? = nil,
+        imagesData: [Data] = []
     ) {
         self.name = name
         self.info = info
         self.price = price
         self.category = category
         self.features = features
-        self.imageData = imageData
+        self.imagesData = imagesData
     }
 }
 
 extension Product {
-    var image: UIImage? {
-        guard let imageData = imageData else { return nil }
-        return UIImage(data: imageData)
+    var images: [UIImage] {
+        imagesData.compactMap { UIImage(data: $0) }
     }
     
     var orderedFeatuers: [Feature] {

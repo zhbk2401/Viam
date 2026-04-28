@@ -28,8 +28,14 @@ struct HomeScreenView: View {
             features: [
                 Feature(.capacity, value: "30"),
                 Feature(.size, value: "XL"),
+                Feature(.batteryLife, value: "1"),
+                Feature(.brand, value: "Some Brand"),
             ],
-            imageData: UIImage(systemName: "person.circle")?.jpegData(compressionQuality: 1.0)
+            imagesData: [
+                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!,
+                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!,
+                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!
+            ]
         ),
         
         Product(
@@ -69,7 +75,7 @@ struct HomeScreenView: View {
                         ForEach(filteredProducts) { product in
                             ProductCardView(product: product)
                                 .onTapGesture {
-                                    coordinator.navigate(to: .prodoctCard(product))
+                                    coordinator.navigate(to: .prodoctPage(product))
                                 }
                         }
                     } header: {
@@ -84,16 +90,12 @@ struct HomeScreenView: View {
         .padding(.top, -50)
         .searchable(text: $searchText, placement: .automatic, prompt: "Search for products")
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            LinearGradient(
-                colors: [.backgroundGradientTop, .backgroundGradientBottom],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-        }
+        .gradientBackground()
         .animation(.bouncy, value: searchText)
         .animation(.bouncy, value: selectedCategory)
+        .onAppear {
+//            coordinator.navigate(to: .prodoctPage(products[0]))
+        }
     }
     
     var header: some View {

@@ -2,7 +2,7 @@ import Foundation
 
 enum AppRoute: Hashable {
     case profile
-    case prodoctCard(Product)
+    case prodoctPage(Product)
 }
 
 enum FullScreenCover: Hashable, Identifiable {

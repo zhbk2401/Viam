@@ -21,7 +21,7 @@ struct ProductCardView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if let image = product.image {
+                if let image = product.images.first {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()

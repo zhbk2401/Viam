@@ -53,8 +53,8 @@ extension RootView {
     @ViewBuilder
     func contentFor(route: AppRoute) -> some View {
         switch route {
-            case .prodoctCard(let product):
-                Text(product.name)
+            case .prodoctPage(let product):
+                ProductView(product: product)
             case .profile:
                 Color.red
         }

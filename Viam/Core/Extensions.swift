@@ -38,4 +38,26 @@ extension View {
             self
         }
     }
+    
+    func gradientBackground() -> some View {
+        self.background {
+            LinearGradient(
+                colors: [.backgroundGradientTop, .backgroundGradientBottom],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+        }
+    }
+    
+    func buttonContentStyle<S: ShapeStyle>(fill: S) -> some View {
+        self
+            .font(.mulish(.extraBold, size: 20))
+            .padding(.horizontal, 12)
+            .background {
+                Capsule().fill(fill)
+                    .frame(height: 56)
+                    .frame(minWidth: 56)
+            }
+    }
 }

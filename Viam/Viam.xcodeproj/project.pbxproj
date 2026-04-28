@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		6FF670EE2FA0F28E00D79B1B /* Viam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Viam.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FF670EE2FA0F28E00D79B1B /* Viam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Viam.app; path = "/Users/zhbk01/Documents/GitHub/Viam/Viam/build/Debug-iphoneos/Viam.app"; sourceTree = "<absolute>"; };
 		6FF671382FA1059C00D79B1B /* Viam-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Viam-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,16 +59,7 @@
 				6FF671252FA0F71100D79B1B /* Models */,
 				6FF671282FA0F72800D79B1B /* ViewModels */,
 				6FF671262FA0F71C00D79B1B /* Views */,
-				6FF670EF2FA0F28E00D79B1B /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		6FF670EF2FA0F28E00D79B1B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6FF670EE2FA0F28E00D79B1B /* Viam.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,7 +116,7 @@
 			mainGroup = 6FF670E52FA0F28E00D79B1B;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 6FF670EF2FA0F28E00D79B1B /* Products */;
+			productRefGroup = 6FF670E52FA0F28E00D79B1B;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
