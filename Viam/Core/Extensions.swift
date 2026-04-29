@@ -60,4 +60,11 @@ extension View {
                     .frame(minWidth: 56)
             }
     }
+    
+    func tileBackground() -> some View {
+        self.background {
+            RoundedRectangle(cornerRadius: 30)
+                .fill(.thinMaterial)
+        }
+    }
 }

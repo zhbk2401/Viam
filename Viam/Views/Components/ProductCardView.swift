@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProductCardView: View {
+    @EnvironmentObject var coordinator: Coordinator
     let product: Product
     
     var body: some View {
@@ -22,24 +23,28 @@ struct ProductCardView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if let image = product.images.first {
+                    
+                    let aspectRatio = image.size.width / image.size.height
+                    
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
+                        .padding(.vertical, -20)
+                        .offset(y: aspectRatio < 1 ? 20 : 0)
                         .frame(width: 130)
-                        .clipped()
                 }
             }
         }
         .frame(maxHeight: 210, alignment: .leading)
         .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 30)
-                .fill(.thinMaterial)
-                
-        }
+        .tileBackground()
         .overlay(alignment: .topTrailing) {
             PlusButton()
                 .padding()
+        }
+        .clipped()
+        .onTapGesture {
+            coordinator.navigate(to: .prodoctPage(product))
         }
     }
     
@@ -48,6 +53,46 @@ struct ProductCardView: View {
             ForEach(product.orderedFeatuers.prefix(2)) { feature in
                 FeatureBadge(feature: feature)
             }
+        }
+    }
+}
+
+struct CompactProductCardView: View {
+    @EnvironmentObject var coordinator: Coordinator
+    let product: Product
+    
+    var body: some View {
+        ZStack {
+            Image(uiImage: product.images.first ?? UIImage())
+                .resizable()
+                .scaledToFit()
+                .offset(y: -15)
+                
+            RoundedRectangle(cornerRadius: 30)
+                .fill(.thinMaterial)
+                .mask {
+                    LinearGradient(
+                        colors: [.clear, .clear, .primary.opacity(0.8), .primary],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+            
+            Text(product.name)
+                .lineLimit(2)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                .font(.mulish(.extraBold, size: 16))
+                .padding(.vertical, 10)
+                .padding(.horizontal, 15)
+        }
+        .frame(width: 150, height: 150)
+        .tileBackground()
+        .overlay(alignment: .topTrailing) {
+            PlusButton()
+                .offset(x: 10, y: -10)
+        }
+        .onTapGesture {
+            coordinator.navigate(to: .prodoctPage(product))
         }
     }
 }

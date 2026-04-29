@@ -19,17 +19,12 @@ struct ProductView: View {
                 header
                 info
                 features
+                
+                compactProductViewRow(title: "Often taken with", products: [product, product])
+                compactProductViewRow(title: "Similar products", products: [product, product])
             }
             .padding()
             .frame(maxWidth: .infinity)
-        }
-        .background {
-            LinearGradient(
-                colors: [.primaryInverted.opacity(0.5), .clear],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
         }
         .gradientBackground()
         .toolbar {
@@ -72,7 +67,7 @@ struct ProductView: View {
                     endPoint: .bottom
                 )
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, 30)
             .overlay(alignment: .bottom) {
                 Button {
                     withAnimation(.bouncy) {
@@ -84,7 +79,7 @@ struct ProductView: View {
                         systemImage: showFullInfo ? "chevron.up" : "chevron.down"
                     )
                     .font(.mulish(.extraBold, size: 16))
-                    .foregroundStyle(.secondaryAccent)
+                    .foregroundStyle(.black.opacity(0.8))
                     .padding(5)
                 }
             }
@@ -123,10 +118,7 @@ struct ProductView: View {
         .font(.mulish(.medium, size: 16))
         .lineLimit(1)
         .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 30)
-                .fill(.thinMaterial)
-        }
+        .tileBackground()
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {
                 Button {
@@ -151,6 +143,23 @@ struct ProductView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.secondaryAccent)
             }
+        }
+    }
+    
+    func compactProductViewRow(title: String, products: [Product]) -> some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.mulish(.extraBold, size: 20))
+                .foregroundStyle(.secondary)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(products) { product in
+                        CompactProductCardView(product: product)
+                    }
+                }
+            }
+            .scrollClipDisabled()
         }
     }
 }

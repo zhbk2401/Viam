@@ -4,7 +4,7 @@ struct CarouselView<Data: RandomAccessCollection, Content: View>: View {
     
     let items: Data
     let content: (Data.Element) -> Content
-    private let itemWidth: CGFloat = 200
+    private let itemWidth: CGFloat = 180
     private let spacing: CGFloat = 5
     
     @State private var currentIndex: Int = 0
@@ -20,8 +20,8 @@ struct CarouselView<Data: RandomAccessCollection, Content: View>: View {
                     content(item)
                         .frame(width: itemWidth)
                         .scaleEffect(index == currentIndex ? 1 : 0.8)
-                        .opacity(index == currentIndex ? 1 : 0.6)
                         .animation(.easeInOut, value: currentIndex)
+                        .zIndex(index == currentIndex ? 1 : 0)
                         .onTapGesture {
                             currentIndex = index
                         }

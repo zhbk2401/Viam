@@ -32,9 +32,9 @@ struct HomeScreenView: View {
                 Feature(.brand, value: "Some Brand"),
             ],
             imagesData: [
-                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!,
-                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!,
-                UIImage(systemName: "person.circle")!.jpegData(compressionQuality: 1.0)!
+                UIImage(resource: .backpack).pngData()!,
+                UIImage(resource: .backpack).pngData()!,
+                UIImage(resource: .backpack).pngData()!
             ]
         ),
         
@@ -42,7 +42,12 @@ struct HomeScreenView: View {
             name: "Trail Running Shoes",
             info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
             price: 89.99,
-            category: .clothing
+            category: .clothing,
+            imagesData: [
+                UIImage(resource: .roll).pngData()!,
+                UIImage(resource: .roll).pngData()!,
+                UIImage(resource: .roll).pngData()!
+            ]
         ),
         
         Product(
@@ -74,9 +79,6 @@ struct HomeScreenView: View {
                     Section {
                         ForEach(filteredProducts) { product in
                             ProductCardView(product: product)
-                                .onTapGesture {
-                                    coordinator.navigate(to: .prodoctPage(product))
-                                }
                         }
                     } header: {
                         filters
@@ -93,9 +95,6 @@ struct HomeScreenView: View {
         .gradientBackground()
         .animation(.bouncy, value: searchText)
         .animation(.bouncy, value: selectedCategory)
-        .onAppear {
-//            coordinator.navigate(to: .prodoctPage(products[0]))
-        }
     }
     
     var header: some View {
