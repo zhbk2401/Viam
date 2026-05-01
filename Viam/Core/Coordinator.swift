@@ -7,7 +7,10 @@ final class Coordinator: ObservableObject {
     @Published var screenCover: FullScreenCover? = nil
     @Published var overlays: [ScreenOverlay] = []
     
+    static let shared = Coordinator()
     private var screenCoverStack: [FullScreenCover] = []
+    
+    private init() {}
     
     func navigate(to route: AppRoute) {
         path.append(route)

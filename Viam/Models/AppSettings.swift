@@ -10,6 +10,10 @@ final class AppSettings: ObservableObject {
             objectWillChange.send()
         }
     }
+    
+    static let shared = AppSettings()
+    
+    private init() {}
 
     func applyTheme(_ theme: AppTheme) {
         preferredTheme = theme

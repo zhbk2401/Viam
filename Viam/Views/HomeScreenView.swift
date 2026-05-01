@@ -1,14 +1,16 @@
 import SwiftUI
+import SwiftData
 
 struct HomeScreenView: View {
     @EnvironmentObject var coordinator: Coordinator
+    @Environment(\.currentUser) private var currentUser
+    
     @State private var scrollOffset: CGFloat = 0
     @State var searchText: String = ""
     @State var selectedCategory: Category? = nil
     
-    
     var filteredProducts: [Product] {
-        products
+        Product.mockList
             .filter { product in
                 searchText.isEmpty ||
                 product.name.localizedCaseInsensitiveContains(searchText) ||
@@ -19,48 +21,12 @@ struct HomeScreenView: View {
             }
     }
     
-    let products: [Product] = [
-        Product(
-            name: "Hiking Backpack",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 129.99,
-            category: .backpacks,
-            features: [
-                Feature(.capacity, value: "30"),
-                Feature(.size, value: "XL"),
-                Feature(.batteryLife, value: "1"),
-                Feature(.brand, value: "Some Brand"),
-            ],
-            imagesData: [
-                UIImage(resource: .backpack).pngData()!,
-                UIImage(resource: .backpack).pngData()!,
-                UIImage(resource: .backpack).pngData()!
-            ]
-        ),
-        
-        Product(
-            name: "Trail Running Shoes",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 89.99,
-            category: .clothing,
-            imagesData: [
-                UIImage(resource: .roll).pngData()!,
-                UIImage(resource: .roll).pngData()!,
-                UIImage(resource: .roll).pngData()!
-            ]
-        ),
-        
-        Product(
-            name: "Trail Running Shoes",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 89.99,
-            category: .clothing
-        ),
-    ]
-    
     var body: some View {
+        @Bindable var currentUser = currentUser
+        
         ZStack(alignment: .top) {
             header
+                .zIndex(scrollOffset < 20 ? 1 : -1)
                 .padding()
                 .blur(radius: min(max(scrollOffset / 10, 0), 200))
             
@@ -73,7 +39,7 @@ struct HomeScreenView: View {
                             }
                         }
                 }
-                .frame(height: 200)
+                .frame(height: 190)
 
                 LazyVStack(pinnedViews: [.sectionHeaders]) {
                     Section {
@@ -81,20 +47,59 @@ struct HomeScreenView: View {
                             ProductCardView(product: product)
                         }
                     } header: {
-                        filters
+                        filters(
+                            startDate: $currentUser.cart.startDate,
+                            endDate: $currentUser.cart.endDate
+                        )
                     }
                 }
                 .padding()
             }
-            
         }
         .coordinateSpace(name: "scroll")
         .padding(.top, -50)
         .searchable(text: $searchText, placement: .automatic, prompt: "Search for products")
+        .searchToolbarBehavior(currentUser.cart.itemCount == 0 ? .automatic : .minimize)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .gradientBackground()
+        .toolbar {
+            if currentUser.cart.itemCount > 0 {
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        coordinator.navigate(to: .cart(currentUser.cart))
+                    } label: {
+                        HStack {
+                            Image(systemName: "cart.fill")
+                            Text("Cart")
+                                .font(.mulish(.extraBold, size: 20))
+                            Text("(\(currentUser.cart.itemCount))")
+                                .font(.mulish(.extraBold, size: 20))
+                                .opacity(0.6)
+                        }
+                        .foregroundStyle(.secondaryAccent)
+                        .padding(.trailing, 5)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.accent)
+                }
+            }
+            
+            ToolbarSpacer(.flexible, placement: .bottomBar)
+            DefaultToolbarItem(kind: .search, placement: .bottomBar)
+        }
         .animation(.bouncy, value: searchText)
         .animation(.bouncy, value: selectedCategory)
+        .animation(.bouncy, value: currentUser.cart.itemCount)
+        .onChange(of: scrollOffset) { oldValue, newValue in
+            if newValue <= 0, oldValue > 0 {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            } else if newValue >= 220, oldValue < 220 {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }
+        }
+        .onAppear {
+//            coordinator.navigate(to: .cart(currentUser.cart))
+        }
     }
     
     var header: some View {
@@ -105,13 +110,14 @@ struct HomeScreenView: View {
                 Spacer()
                 
                 Button {
-                    
+                    print("User")
+                    coordinator.navigate(to: .profile)
                 } label: {
                     Image(systemName: "person.crop.circle")
                         .resizable()
                         .frame(width: 34, height: 34)
                         .padding(5)
-                        .glassEffect(.regular)
+                        .glassEffect(.regular.interactive())
                 }
                 .foregroundStyle(.primary)
             }
@@ -121,32 +127,54 @@ struct HomeScreenView: View {
         }
     }
     
-    var filters: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                CategoryView(
-                    title: "All",
-                    isSelected: selectedCategory == nil
-                )
-                .onTapGesture {
-                    selectedCategory = nil
-                }
-                
-                ForEach(Category.allCases) { category in
+    func filters(startDate: Binding<Date?>, endDate: Binding<Date?>) -> some View {
+        VStack(alignment: .leading) {
+            RentRangeView(
+                startDate: startDate,
+                endDate: endDate,
+                scrollOffset: scrollOffset
+            )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
                     CategoryView(
-                        title: category.title,
-                        isSelected: selectedCategory == category
+                        title: "All",
+                        isSelected: selectedCategory == nil
                     )
                     .onTapGesture {
-                        if selectedCategory == category {
-                            selectedCategory = nil
-                        } else {
-                            selectedCategory = category
+                        selectedCategory = nil
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    }
+                    
+                    ForEach(Category.allCases) { category in
+                        CategoryView(
+                            title: category.title,
+                            isSelected: selectedCategory == category
+                        )
+                        .onTapGesture {
+                            if selectedCategory == category {
+                                selectedCategory = nil
+                            } else {
+                                selectedCategory = category
+                            }
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         }
                     }
                 }
             }
+            .scrollClipDisabled()
         }
-        .scrollClipDisabled()
+        .background {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .mask(
+                    LinearGradient(
+                        colors: [.primary, .primary, .clear],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .padding(-100)
+                .opacity(min(max((scrollOffset - 150) / 100, 0), 1))
+        }
     }
 }

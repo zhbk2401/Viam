@@ -4,7 +4,7 @@ import SwiftData
 
 @Model
 final class Product: Identifiable {
-    var id: UUID = UUID()
+    @Attribute(.unique) var id: UUID = UUID()
     var name: String
     var info: String
     var price: Double
@@ -45,4 +45,44 @@ extension Product {
         
         return ordered
     }
+    
+    static let mockList: [Product] = [
+        Product(
+            name: "Hiking Backpack",
+            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
+            price: 129.99,
+            category: .backpacks,
+            features: [
+                Feature(.capacity, value: "30"),
+                Feature(.size, value: "XL"),
+                Feature(.batteryLife, value: "1"),
+                Feature(.brand, value: "Some Brand"),
+            ],
+            imagesData: [
+                UIImage(resource: .backpack).pngData()!,
+                UIImage(resource: .backpack).pngData()!,
+                UIImage(resource: .backpack).pngData()!
+            ]
+        ),
+        
+        Product(
+            name: "Trail Running Shoes",
+            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
+            price: 89.99,
+            category: .clothing,
+            imagesData: [
+                UIImage(resource: .roll).pngData()!,
+                UIImage(resource: .roll).pngData()!,
+                UIImage(resource: .roll).pngData()!
+            ]
+        ),
+        
+        Product(
+            name: "Trail Running Shoes",
+            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
+            price: 89.99,
+            category: .clothing
+        ),
+    ]
+    
 }

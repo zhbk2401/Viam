@@ -26,6 +26,14 @@ extension Font {
     }
 }
 
+extension Double {
+    func priceFormatted() -> String {
+        self
+            .formatted(.currency(code: "UAH").precision(.fractionLength(2)))
+            .replacingOccurrences(of: "UAH", with: "₴")
+    }
+}
+
 extension View {
     @ViewBuilder
     func conditionalModifier<M: View>(
@@ -39,13 +47,16 @@ extension View {
         }
     }
     
-    func gradientBackground() -> some View {
+    func gradientBackground(tinted: Bool = false) -> some View {
         self.background {
             LinearGradient(
                 colors: [.backgroundGradientTop, .backgroundGradientBottom],
                 startPoint: .top,
                 endPoint: .bottom
             )
+            .overlay(content: {
+                Color.backgroundTint.opacity(tinted ? 0.7 : 0)
+            })
             .ignoresSafeArea()
         }
     }

@@ -42,6 +42,30 @@ struct ProductView: View {
                     ])
                 }
             }
+            
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button {
+                    
+                } label: {
+                    Text("Rental now")
+                        .font(.mulish(.extraBold, size: 20))
+                        .foregroundStyle(.secondaryAccent)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.accent)
+                
+                Spacer()
+                
+                Button {
+                    
+                } label: {
+                    Image(systemName: "heart.fill")
+                        .font(.mulish(.extraBold, size: 20))
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.secondaryAccent)
+            }
         }
     }
     
@@ -119,31 +143,6 @@ struct ProductView: View {
         .lineLimit(1)
         .padding()
         .tileBackground()
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                Button {
-                    
-                } label: {
-                    Text("Rental now")
-                        .font(.mulish(.extraBold, size: 20))
-                        .foregroundStyle(.secondaryAccent)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.accent)
-                
-                Spacer()
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "heart.fill")
-                        .font(.mulish(.extraBold, size: 20))
-                        .foregroundStyle(.white)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.secondaryAccent)
-            }
-        }
     }
     
     func compactProductViewRow(title: String, products: [Product]) -> some View {

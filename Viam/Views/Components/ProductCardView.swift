@@ -2,9 +2,12 @@ import SwiftUI
 
 struct ProductCardView: View {
     @EnvironmentObject var coordinator: Coordinator
+    @Environment(\.currentUser) private var currentUser
     let product: Product
     
     var body: some View {
+        @Bindable var currentUser = currentUser
+        
         VStack(alignment: .leading, spacing: 5) {
             Text(product.name)
                 .font(.mulish(.extraBold, size: 20))
@@ -15,7 +18,7 @@ struct ProductCardView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(product.info)
-                        .font(.mulish(.medium, size: 14))
+                        .font(.mulish(.medium, size: 13))
                         .foregroundStyle(.primary.opacity(0.7))
                     
                     features
@@ -30,16 +33,19 @@ struct ProductCardView: View {
                         .resizable()
                         .scaledToFit()
                         .padding(.vertical, -20)
-                        .offset(y: aspectRatio < 1 ? 20 : 0)
-                        .frame(width: 130)
+                        .offset(y: aspectRatio < 1 ? 15 : 0)
+                        .scaleEffect(aspectRatio < 1 ? 1.1 : 1)
+                        .frame(width: 140)
                 }
             }
         }
-        .frame(maxHeight: 210, alignment: .leading)
+        .frame(maxHeight: 200, alignment: .leading)
         .padding()
         .tileBackground()
         .overlay(alignment: .topTrailing) {
-            PlusButton()
+            PlusButton {
+                currentUser.cart.addProduct(product)
+            }
                 .padding()
         }
         .clipped()
@@ -59,9 +65,12 @@ struct ProductCardView: View {
 
 struct CompactProductCardView: View {
     @EnvironmentObject var coordinator: Coordinator
+    @Environment(\.currentUser) private var currentUser
     let product: Product
     
     var body: some View {
+        @Bindable var currentUser = currentUser
+        
         ZStack {
             Image(uiImage: product.images.first ?? UIImage())
                 .resizable()
@@ -88,7 +97,9 @@ struct CompactProductCardView: View {
         .frame(width: 150, height: 150)
         .tileBackground()
         .overlay(alignment: .topTrailing) {
-            PlusButton()
+            PlusButton {
+                currentUser.cart.addProduct(product)
+            }
                 .offset(x: 10, y: -10)
         }
         .onTapGesture {

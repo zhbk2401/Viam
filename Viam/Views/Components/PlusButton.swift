@@ -1,10 +1,12 @@
 import SwiftUI
 
 struct PlusButton: View {
+    var action: (() -> Void)? = nil
     
     var body: some View {
         Button {
-            // Action to perform when the button is tapped
+            action?()
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         } label: {
             Image(systemName: "plus")
                 .bold()
