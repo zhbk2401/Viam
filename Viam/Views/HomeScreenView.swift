@@ -114,7 +114,7 @@ struct HomeScreenView: View {
             Text("The following products are unavailable for the selected dates and have been removed from your cart:\n\(deletedProductsInfo)")
         }
         .onAppear {
-//            coordinator.navigate(to: .profile(currentUser))
+//            coordinator.navigate(to: .editPersonalInfo(currentUser))
         }
     }
     
@@ -137,9 +137,10 @@ struct HomeScreenView: View {
                     
                     image
                         .resizable()
-                        .frame(width: 34, height: 34)
+                        .scaledToFill()
+                        .frame(width: 42, height: 42)
                         .clipShape(Circle())
-                        .padding(5)
+                        .padding(1)
                         .glassEffect(.regular.interactive())
                 }
                 .foregroundStyle(.primary)

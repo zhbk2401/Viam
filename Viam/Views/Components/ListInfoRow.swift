@@ -66,6 +66,35 @@ struct InfoRow<V: View>: View {
     }
 }
 
+struct InputField<V: View>: View {
+    let title: String
+    let content: () -> V
+    
+    init(_ title: String, @ViewBuilder content: @escaping () -> V) {
+        self.title = title
+        self.content = content
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .font(.mulish(.medium, size: 14))
+                .padding(.horizontal, 15)
+            
+            content()
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.ultraThinMaterial)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(.secondary.opacity(0.4), lineWidth: 0.5)
+                }
+        }
+    }
+}
+
 extension View {
     func listRowButtonStyle() -> some View {
         self

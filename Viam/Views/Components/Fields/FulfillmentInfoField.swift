@@ -119,7 +119,7 @@ struct FulfillmentInfoPickerView: View {
     
     @ViewBuilder
     var pickupInfo: some View {
-        section("City") {
+        InputField("City") {
             Menu {
                 ForEach(BranchDatabase.cities, id: \.self) { city in
                     Button(action: {
@@ -148,7 +148,7 @@ struct FulfillmentInfoPickerView: View {
             .buttonStyle(.plain)
         }
         
-        section("Branch") {
+        InputField("Branch") {
             Menu {
                 ForEach(filteredBranches) { branchAddress in
                     Button(action: {
@@ -186,22 +186,5 @@ struct FulfillmentInfoPickerView: View {
         .glassEffect(.regular.interactive().tint(.secondaryAccent))
     }
     
-    @ViewBuilder
-    func section<V: View>(
-        _ title: String,
-        @ViewBuilder content: () -> V
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text(title)
-                .font(.mulish(.medium, size: 14))
-                .padding(.horizontal, 15)
-            
-            content()
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(.ultraThinMaterial)
-                }
-        }
-    }
+    
 }

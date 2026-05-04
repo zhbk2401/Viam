@@ -6,10 +6,7 @@ struct ProfileView: View {
     
     var body: some View {
         List {
-            Section("") {
-                header
-            }
-            .listRowBackground(Color.clear)
+            header.listRowBackground(Color.clear)
             
             Section("Personal Information") {
                 InfoRow("Edit Personal Info", route: .editPersonalInfo(currentUser))
@@ -46,6 +43,7 @@ struct ProfileView: View {
                 .listRowButtonStyle()
             }
         }
+        .padding(.top, -40)
         .scrollContentBackground(.hidden)
         .navigationTitle("User Profile")
         .navigationBarTitleDisplayMode(.inline)
@@ -60,27 +58,25 @@ struct ProfileView: View {
             Image(systemName: "person.crop.circle")
         }
         
-        image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 140, height: 140)
-            .clipShape(Circle())
-            .conditionalModifier(currentUser.avatar == nil) { view in
-                view.foregroundStyle(.secondary)
-            }
-            .mask {
-                LinearGradient(
-                    colors: [.primary, .primary, .clear],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            }
-            .padding(.bottom, 20)
-            .frame(maxWidth: .infinity)
-            .overlay(alignment: .bottom) {
-                Text("\(currentUser.fullName)")
-                    .font(.mulish(.extraBold, size: 20))
-            }
+        VStack {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 140, height: 140)
+                .clipShape(Circle())
+                .conditionalModifier(currentUser.avatar == nil) { view in
+                    view.foregroundStyle(.secondary)
+                }
+                .overlay {
+                    Circle()
+                        .stroke(.secondary.opacity(0.3), lineWidth: 1)
+                }
+                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+            
+            Text("\(currentUser.fullName)")
+                .font(.mulish(.extraBold, size: 20))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

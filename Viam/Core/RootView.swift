@@ -90,7 +90,7 @@ extension RootView {
             case .profile(let userInfo):
                 ProfileView(currentUser: userInfo)
             case .editPersonalInfo(let userInfo):
-                Color.clear
+                PersonalInfoEditingView(user: userInfo)
             case .favorites(let userInfo):
                 FavoritesView(user: userInfo)
             case .orderHistory(let orders):
