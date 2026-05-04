@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct ProductView: View {
+    @Environment(\.currentUser) private var currentUser
     @State var showActionSheet = false
     @State var showFullInfo = false
     
     let product: Product
     
     var body: some View {
+        @Bindable var currentUser = currentUser
+        
         ScrollView {
             VStack(spacing: 10) {
                 CarouselView(items: product.images) { image in
@@ -44,12 +47,27 @@ struct ProductView: View {
             }
             
             ToolbarItemGroup(placement: .bottomBar) {
+                
+                let isAddedToCart = currentUser.cart.items.contains(where: { $0.product == product })
+                
                 Button {
-                    
+                    if isAddedToCart {
+                        currentUser.removeFromCart(product)
+                    } else {
+                        if currentUser.addToCart(product) {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        } else {
+                            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+                        }
+                    }
                 } label: {
-                    Text("Rental now")
+                    let buttonText = isAddedToCart
+                        ? "Remove from Cart"
+                        : "Add to Cart"
+                    
+                    Text(buttonText)
                         .font(.mulish(.extraBold, size: 20))
-                        .foregroundStyle(.secondaryAccent)
+                        .foregroundStyle(.black)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.accent)
@@ -57,9 +75,9 @@ struct ProductView: View {
                 Spacer()
                 
                 Button {
-                    
+                    currentUser.toggleFavoriteState(for: product)
                 } label: {
-                    Image(systemName: "heart.fill")
+                    Image(systemName: currentUser.isFavorite(product) ? "heart.fill" : "heart")
                         .font(.mulish(.extraBold, size: 20))
                         .foregroundStyle(.white)
                 }
@@ -76,6 +94,13 @@ struct ProductView: View {
             
             PriceView(price: product.price)
                 .foregroundStyle(.secondary)
+            
+            if let startDate = currentUser.cart.startDate,
+               let endDate = currentUser.cart.endDate {
+                Text("Available count: \(product.availableCount(for: startDate...endDate))")
+                    .font(.mulish(.medium, size: 14))
+                    .foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -162,4 +187,3 @@ struct ProductView: View {
         }
     }
 }
-

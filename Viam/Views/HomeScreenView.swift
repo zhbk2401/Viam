@@ -4,13 +4,16 @@ import SwiftData
 struct HomeScreenView: View {
     @EnvironmentObject var coordinator: Coordinator
     @Environment(\.currentUser) private var currentUser
+    @Query(sort: \Product.name) private var products: [Product]
     
     @State private var scrollOffset: CGFloat = 0
     @State var searchText: String = ""
     @State var selectedCategory: Category? = nil
+    @State private var deletedProductsInfo = ""
+    @State private var showDeletedProductsAlert = false
     
     var filteredProducts: [Product] {
-        Product.mockList
+        products
             .filter { product in
                 searchText.isEmpty ||
                 product.name.localizedCaseInsensitiveContains(searchText) ||
@@ -18,6 +21,14 @@ struct HomeScreenView: View {
             }
             .filter { product in
                 selectedCategory == nil || product.category == selectedCategory
+            }
+            .filter { product in
+                guard
+                    let startDate = currentUser.cart.startDate,
+                    let endDate = currentUser.cart.endDate
+                else { return true }
+                
+                return product.availableCount(for: startDate...endDate) > 0
             }
     }
     
@@ -66,7 +77,7 @@ struct HomeScreenView: View {
             if currentUser.cart.itemCount > 0 {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
-                        coordinator.navigate(to: .cart(currentUser.cart))
+                        coordinator.navigate(to: .cart(currentUser))
                     } label: {
                         HStack {
                             Image(systemName: "cart.fill")
@@ -97,8 +108,13 @@ struct HomeScreenView: View {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
             }
         }
+        .alert("Unavailable Products", isPresented: $showDeletedProductsAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The following products are unavailable for the selected dates and have been removed from your cart:\n\(deletedProductsInfo)")
+        }
         .onAppear {
-//            coordinator.navigate(to: .cart(currentUser.cart))
+//            coordinator.navigate(to: .profile(currentUser))
         }
     }
     
@@ -111,11 +127,18 @@ struct HomeScreenView: View {
                 
                 Button {
                     print("User")
-                    coordinator.navigate(to: .profile)
+                    coordinator.navigate(to: .profile(currentUser))
                 } label: {
-                    Image(systemName: "person.crop.circle")
+                    let image = if let avatar = currentUser.avatar {
+                        Image(uiImage: avatar)
+                    } else {
+                        Image(systemName: "person.crop.circle")
+                    }
+                    
+                    image
                         .resizable()
                         .frame(width: 34, height: 34)
+                        .clipShape(Circle())
                         .padding(5)
                         .glassEffect(.regular.interactive())
                 }
@@ -134,6 +157,19 @@ struct HomeScreenView: View {
                 endDate: endDate,
                 scrollOffset: scrollOffset
             )
+            .onChange(of: startDate.wrappedValue) { oldValue, newValue in
+                let deletedProducts = currentUser.cart.deleteUnavailableItems()
+                if deletedProducts.isEmpty { return }
+                deletedProductsInfo = deletedProducts.toString(separator: "\n")
+                showDeletedProductsAlert = true
+            }
+            .onChange(of: endDate.wrappedValue) { oldValue, newValue in
+                let deletedProducts = currentUser.cart.deleteUnavailableItems()
+                if deletedProducts.isEmpty { return }
+                deletedProductsInfo = deletedProducts.toString(separator: "\n")
+                showDeletedProductsAlert = true
+            }
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     CategoryView(

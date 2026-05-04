@@ -37,7 +37,7 @@ extension Double {
 extension View {
     @ViewBuilder
     func conditionalModifier<M: View>(
-        isActive: Bool = true,
+        _ isActive: Bool = true,
         _ modifier: (Self) -> M,
     ) -> some View {
         if isActive {
@@ -78,4 +78,14 @@ extension View {
                 .fill(.thinMaterial)
         }
     }
+    
+    func buttonSized() -> some View {
+        self
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
+    }
+}
+
+extension String: @retroactive Identifiable {
+    public var id: String { self }
 }

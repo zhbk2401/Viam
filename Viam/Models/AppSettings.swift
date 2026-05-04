@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Combine
 import SwiftUI
 
@@ -11,7 +12,11 @@ final class AppSettings: ObservableObject {
         }
     }
     
+    @Published var currentUser: UserInfo?
+    @Published var bootstrapError: String?
+    
     static let shared = AppSettings()
+    private var didBootstrap = false
     
     private init() {}
 
@@ -29,6 +34,36 @@ final class AppSettings: ObservableObject {
             return nil
         }
     }
+    
+    func bootstrap(context: ModelContext) {
+        guard !didBootstrap, bootstrapError == nil else { return }
+
+        do {
+            try ProductSeeder.seedIfNeeded(context: context)
+            try loadUser(context: context)
+            didBootstrap = true
+        } catch {
+            bootstrapError = "Failed to initialize local data: \(error.localizedDescription)"
+        }
+    }
+
+    func retryBootstrap(context: ModelContext) {
+        bootstrapError = nil
+        bootstrap(context: context)
+    }
+
+    private func loadUser(context: ModelContext) throws {
+        let descriptor = FetchDescriptor<UserInfo>()
+        
+        if let user = try context.fetch(descriptor).first {
+            currentUser = user
+        } else {
+            let newUser = UserInfo()
+            context.insert(newUser)
+            try context.save()
+            currentUser = newUser
+        }
+    }
 }
 
 enum AppTheme: String, CaseIterable {
@@ -36,4 +71,3 @@ enum AppTheme: String, CaseIterable {
     case light = "Light"
     case dark = "Dark"
 }
-

@@ -1,37 +1,57 @@
 import Foundation
 import SwiftData
 
-enum FulfillmentMethod: Identifiable, Codable, Hashable {
-    var id: Self { self }
+struct FulfillmentInfo: Identifiable, Codable, Hashable {
+    var id: UUID = UUID()
     
-    case courier(Address)
-    case pickup(Address)
-    
-    var title: String {
-        switch self {
-            case .courier: "Courier Delivery"
-            case .pickup: "Pickup Point"
-        }
-    }
+    var method: MethodType
+    var address: Address
     
     var addressString: String {
-        switch self {
-            case .courier(let address): address.fullAddress
-            case .pickup(let address): address.fullAddress
-        }
+        address.fullAddress
     }
     
     var fullDescription: String {
-        "\(title) (\(addressString))"
+        "\(method.title) (\(addressString))"
+    }
+    
+    enum MethodType: Identifiable, CaseIterable, Codable, Hashable {
+        var id: Self { self }
+        
+        case courier
+        case pickup
+        
+        var title: String {
+            switch self {
+                case .courier: "Courier Delivery"
+                case .pickup: "Branch Pickup"
+            }
+        }
     }
 }
 
-struct Address: Identifiable, Codable, Hashable {
+enum PaymentMethod: Identifiable, CaseIterable, Codable, Hashable {
     var id: Self { self }
     
-    let city: String?
-    let street: String?
-    let houseNumber: String?
+    case card
+    case cash
+    
+    var title: String {
+        switch self {
+            case .card: "Apple Pay"
+            case .cash: "Cash"
+        }
+    }
+}
+
+
+
+struct Address: Identifiable, Codable, Hashable {
+    var id: UUID = UUID()
+    
+    var city: String?
+    var street: String?
+    var houseNumber: String?
     
     var fullAddress: String {
         [streetWithNumber, city]
@@ -64,8 +84,18 @@ final class Order: Identifiable {
     var items: [OrderItem]
     var startDate: Date?
     var endDate: Date?
-    var receivingMethod: FulfillmentMethod?
-    var dropoffMethod: FulfillmentMethod?
+    var receivingInfo: FulfillmentInfo?
+    var dropoffInfo: FulfillmentInfo?
+    var paymentMethod: PaymentMethod?
+    
+    var isComplete: Bool {
+        !items.isEmpty &&
+        startDate != nil &&
+        endDate != nil &&
+        receivingInfo != nil &&
+        dropoffInfo != nil &&
+        paymentMethod != nil
+    }
     
     var daysDuration: Int? {
         guard let startDate, let endDate else { return nil }
@@ -98,14 +128,16 @@ final class Order: Identifiable {
         items: [OrderItem] = [],
         startDate: Date? = nil,
         endDate: Date? = nil,
-        receivingMethod: FulfillmentMethod? = nil,
-        dropoffMethod: FulfillmentMethod? = nil
+        receivingInfo: FulfillmentInfo? = nil,
+        dropoffInfo: FulfillmentInfo? = nil,
+        paymentMethod: PaymentMethod? = nil
     ) {
         self.items = items
         self.startDate = startDate
         self.endDate = endDate
-        self.receivingMethod = receivingMethod
-        self.dropoffMethod = dropoffMethod
+        self.receivingInfo = receivingInfo
+        self.dropoffInfo = dropoffInfo
+        self.paymentMethod = paymentMethod
     }
     
     var nonEmptyItems: [OrderItem] {
@@ -148,6 +180,33 @@ final class Order: Identifiable {
         items.removeAll { $0.product.id == product.id }
     }
     
+    func deleteUnavailableItems() -> [OrderItem] {
+        guard let startDate, let endDate else { return [] }
+            
+        var updatedItems: [OrderItem] = []
+        var deletedItems: [OrderItem] = []
+        
+        for item in items {
+            let availableCount = item.product.availableCount(for: startDate...endDate)
+            
+            if availableCount <= 0 {
+                deletedItems.append(item)
+            } else if availableCount < item.quantity {
+                let countToDelete = item.quantity - availableCount
+                deletedItems.append(OrderItem(product: item.product, quantity: countToDelete))
+                
+                var updated = item
+                updated.quantity = availableCount
+                updatedItems.append(updated)
+            } else {
+                updatedItems.append(item)
+            }
+        }
+        
+        items = updatedItems
+        return deletedItems
+    }
+    
     func changeQuantity(of product: Product, by count: Int) {
         if count > 0 {
             addProduct(product, quantity: count)
@@ -155,4 +214,28 @@ final class Order: Identifiable {
             removeProduct(product, quantity: abs(count))
         }
     }
+}
+
+extension Order {
+    static let mockList: [Order] = [
+        Order(
+            items: [
+                .init(product: .mockList[0])
+            ],
+            startDate: Date(),
+            endDate: Date().addingTimeInterval(3600),
+            receivingInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
+            dropoffInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
+        ),
+        
+        Order(
+            items: [
+                .init(product: .mockList[0])
+            ],
+            startDate: Date(),
+            endDate: Date().addingTimeInterval(3600),
+            receivingInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
+            dropoffInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
+        )
+    ]
 }

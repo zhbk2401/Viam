@@ -18,3 +18,9 @@ final class OrderItem: Identifiable {
         self.order = order
     }
 }
+
+extension [OrderItem] {
+    func toString(separator: String = ", ") -> String {
+        self.map { "\($0.product.name) x\($0.quantity)" }.joined(separator: separator)
+    }
+}

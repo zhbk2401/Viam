@@ -1,22 +1,35 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 @MainActor
 struct RootView: View {
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var coordinator: Coordinator = .shared
-    @ObservedObject var appSettings: AppSettings = .shared
-    @Query private var users: [UserInfo]
+    @StateObject var coordinator: Coordinator = .shared
+    @StateObject var appSettings: AppSettings = .shared
     
     var body: some View {
         Group {
-            if let currentUser {
+            if let user = appSettings.currentUser {
                 rootContent
-                    .environment(\.currentUser, currentUser)
+                    .environment(\.currentUser, user)
+            } else if let error = appSettings.bootstrapError {
+                ContentUnavailableView(
+                    "Initialization Error",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text(error)
+                )
+                .overlay(alignment: .bottom) {
+                    Button("Retry") {
+                        appSettings.retryBootstrap(context: modelContext)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding()
+                }
             } else {
                 ProgressView()
                     .task {
-                        ensureCurrentUserExists()
+                        appSettings.bootstrap(context: modelContext)
                     }
             }
         }
@@ -51,22 +64,6 @@ struct RootView: View {
         }
     }
     
-    private var currentUser: UserInfo? {
-        users.first
-    }
-    
-    private func ensureCurrentUserExists() {
-        guard users.isEmpty else { return }
-        
-        modelContext.insert(UserInfo())
-        
-        do {
-            try modelContext.save()
-        } catch {
-            debugPrint("Error creating current user:", error)
-        }
-    }
-    
 //    func setUpOverlays() {
 //        if appSettings.isStartTrialActive && !appSettings.isStartTrialPopUpShown {
 //            coordinator.addOverlay(.trialInfo)
@@ -88,14 +85,18 @@ extension RootView {
         switch route {
             case .prodoctPage(let product):
                 ProductView(product: product)
-            case .profile:
-                Color.red
-            case .settings:
-                Color.blue
-            case .saved:
-                Color.green
-            case .cart(let order):
-                CartView(order: order)
+            case .cart(let userInfo):
+                CartView(user: userInfo)
+            case .profile(let userInfo):
+                ProfileView(currentUser: userInfo)
+            case .editPersonalInfo(let userInfo):
+                Color.clear
+            case .favorites(let userInfo):
+                FavoritesView(user: userInfo)
+            case .orderHistory(let orders):
+                OrderHistoryView(orders: orders)
+            case .orderDetails(let order):
+                OrderView(order: order, isEditable: false)
         }
     }
     
@@ -116,5 +117,5 @@ extension RootView {
 
 #Preview {
     RootView()
-        .modelContainer(for: [Product.self, UserInfo.self, Order.self, OrderItem.self], inMemory: false)
+        .modelContainer(for: [Product.self, UserInfo.self, Order.self, OrderItem.self], inMemory: true)
 }

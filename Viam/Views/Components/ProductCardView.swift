@@ -43,9 +43,7 @@ struct ProductCardView: View {
         .padding()
         .tileBackground()
         .overlay(alignment: .topTrailing) {
-            PlusButton {
-                currentUser.cart.addProduct(product)
-            }
+            AddToCartButton(product: product)
                 .padding()
         }
         .clipped()
@@ -59,6 +57,45 @@ struct ProductCardView: View {
             ForEach(product.orderedFeatuers.prefix(2)) { feature in
                 FeatureBadge(feature: feature)
             }
+        }
+    }
+}
+
+struct InlineProductCard: View {
+    @EnvironmentObject var coordinator: Coordinator
+    let product: Product
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(product.name)
+                    .font(.mulish(.extraBold, size: 20))
+                    .lineLimit(1)
+                
+                PriceView(price: product.price)
+                
+                Text(product.info)
+                    .font(.mulish(.medium, size: 13))
+                    .foregroundStyle(.primary.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            if let image = product.images.first {
+                
+                let aspectRatio = image.size.width / image.size.height
+                
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .padding(.vertical, aspectRatio < 1 ? -20 : 0)
+                    .offset(y: aspectRatio < 1 ? 15 : 0)
+                    .scaleEffect(aspectRatio < 1 ? 1.1 : 1)
+                    .frame(width: 100)
+            }
+        }
+        .frame(maxHeight: 100, alignment: .leading)
+        .onTapGesture {
+            coordinator.navigate(to: .prodoctPage(product))
         }
     }
 }
@@ -97,9 +134,7 @@ struct CompactProductCardView: View {
         .frame(width: 150, height: 150)
         .tileBackground()
         .overlay(alignment: .topTrailing) {
-            PlusButton {
-                currentUser.cart.addProduct(product)
-            }
+            AddToCartButton(product: product)
                 .offset(x: 10, y: -10)
         }
         .onTapGesture {

@@ -1,9 +1,45 @@
 import SwiftUI
 import SwiftData
 
+struct InlineOrderView: View {
+    @EnvironmentObject var coordinator: Coordinator
+    @Bindable var order: Order
+    
+    private var dateText: String {
+        "\(order.startDate?.formatted(date: .abbreviated, time: .omitted) ?? "") - \(order.endDate?.formatted(date: .abbreviated, time: .omitted) ?? "")"
+    }
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(order.items.toString())
+                    .font(.mulish(.extraBold, size: 16))
+                    .lineLimit(1)
+                
+                Text(dateText)
+                    .font(.mulish(.medium, size: 14))
+                    .lineLimit(1)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Spacer(minLength: 0)
+            
+            Image(systemName: "chevron.right")
+                .bold()
+                .foregroundStyle(.secondary)
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            coordinator.navigate(to: .orderDetails(order))
+        }
+    }
+}
+
 struct OrderView: View {
     @EnvironmentObject var coordinator: Coordinator
     @Bindable var order: Order
+    @State private var deletedProductsInfo = ""
+    @State private var showDeletedProductsAlert = false
     
     var isEditable: Bool = false
     
@@ -19,7 +55,7 @@ struct OrderView: View {
                 ForEach(order.nonEmptyItems) { item in
                     productRow(item)
                 }
-                .conditionalModifier(isActive: isEditable) { view in
+                .conditionalModifier(isEditable) { view in
                     view
                         .onDelete { indexSet in
                             for index in indexSet {
@@ -32,63 +68,69 @@ struct OrderView: View {
             }
             
             Section("Total") {
-                infoRow(
-                    title: "Total Price per Day",
-                    text: order.totalPricePerDay.priceFormatted()
-                )
-                
-                infoRow(
-                    title: "Total Days",
-                    text: "\(order.daysDuration ?? 0)"
-                )
-                
-                infoRow(
-                    title: "Total Price",
-                    text: order.totalPrice.priceFormatted()
-                )
+                InfoRow("Total Price per Day", text: order.totalPricePerDay.priceFormatted())
+                InfoRow("Total Days", text: "\(order.daysDuration ?? 0)")
+                InfoRow("Total Price", text: order.totalPrice.priceFormatted())
             }
         }
         .scrollContentBackground(.hidden)
+        .gradientBackground(tinted: true)
         .animation(.bouncy, value: order.nonEmptyItems)
         .onChange(of: order.nonEmptyItems) { oldValue, newValue in
             if newValue.isEmpty {
                 coordinator.goBack()
             }
         }
+        .onChange(of: order.startDate) { oldValue, newValue in
+            let deletedProducts = order.deleteUnavailableItems()
+            
+            if deletedProducts.isEmpty { return }
+            deletedProductsInfo = deletedProducts.toString(separator: "\n")
+            showDeletedProductsAlert = true
+        }
+        .onChange(of: order.endDate) { oldValue, newValue in
+            let deletedProducts = order.deleteUnavailableItems()
+            
+            if deletedProducts.isEmpty { return }
+            deletedProductsInfo = deletedProducts.toString(separator: "\n")
+            showDeletedProductsAlert = true
+        }
+        .alert("Unavailable Products", isPresented: $showDeletedProductsAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The following products are unavailable for the selected dates and have been removed from your cart:\n\(deletedProductsInfo)")
+        }
     }
     
     var orderInfoSection: some View {
         Section("Order Info") {
-            infoRow(
-                title: "Start Date",
+            InfoRow("Start Date",
                 text: order.startDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
             )
             
-            infoRow(
-                title: "End Date",
+            InfoRow("End Date",
                 text: order.endDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
             )
             
-            infoRow(
-                title: "Receiving Method",
-                text: order.receivingMethod?.fullDescription ?? ""
+            InfoRow("Receiving Method",
+                text: order.receivingInfo?.fullDescription ?? ""
             )
             
-            infoRow(
-                title: "Dropoff Method",
-                text: order.dropoffMethod?.fullDescription ?? ""
+            InfoRow("Dropoff Method",
+                text: order.receivingInfo?.fullDescription ?? ""
+            )
+            
+            InfoRow("Payment Method",
+                text: order.paymentMethod?.title ?? ""
             )
         }
     }
     
     var editableOrderInfoSection: some View {
         Section("Order Info") {
-            infoRow(
-                title: "Start Date",
-                content: {
-                    DateField(date: $order.startDate, from: Date())
-                }
-            )
+            InfoRow("Start Date") {
+                DateField(date: $order.startDate, from: Date())
+            }
             .onChange(of: order.startDate) { _, newValue in
                 if let newValue, let end = order.endDate, newValue > end {
                     order.endDate = nil
@@ -96,27 +138,22 @@ struct OrderView: View {
             }
             .animation(.bouncy, value: order.startDate)
             
-            infoRow(
-                title: "End Date",
-                content: {
-                    DateField(date: $order.endDate, from: Date())
-                }
-            )
+            InfoRow("End Date") {
+                DateField(date: $order.endDate, from: Date())
+            }
             .animation(.bouncy, value: order.endDate)
             
-            infoRow(
-                title: "Receiving",
-                content: {
-                    FulfillmentMethodView(method: $order.receivingMethod)
-                }
-            )
+            InfoRow("Receiving") {
+                FulfillmentInfoView(info: $order.receivingInfo)
+            }
             
-            infoRow(
-                title: "Dropoff",
-                content: {
-                    FulfillmentMethodView(method: $order.dropoffMethod)
-                }
-            )
+            InfoRow("Dropoff") {
+                FulfillmentInfoView(info: $order.dropoffInfo)
+            }
+            
+            InfoRow("Payment") {
+                PaymentMethodField(paymentMethod: $order.paymentMethod)
+            }
         }
     }
     
@@ -125,9 +162,16 @@ struct OrderView: View {
         
         return HStack {
             VStack(alignment: .leading, spacing: 5) {
-                Text(product.name)
-                    .font(.mulish(.medium, size: 16))
-                    .lineLimit(1)
+                HStack {
+                    Text(product.name)
+                        .lineLimit(1)
+                    
+                    if !isEditable {
+                        Text("x\(item.quantity)")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .font(.mulish(.medium, size: 16))
                 
                 if isEditable {
                     PriceView(
@@ -152,7 +196,18 @@ struct OrderView: View {
                         .font(.mulish(.bold, size: 16))
                     
                     countButton(systemImageName: "plus") {
-                        order.addProduct(product)
+                        guard let startDate = order.startDate,
+                              let endDate = order.endDate
+                        else {
+                            if product.countAvailable > item.quantity {
+                                order.addProduct(product)
+                            }
+                            return
+                        }
+                        
+                        if product.availableCount(for: startDate...endDate) > item.quantity {
+                            order.addProduct(product)
+                        }
                     }
                 }
             } else {
@@ -169,46 +224,7 @@ struct OrderView: View {
         }
     }
     
-    @ViewBuilder
-    func infoRow(title: String, text: String) -> some View {
-        HStack(alignment: .top) {
-            Text(title)
-                .font(.mulish(.medium, size: 16))
-
-            Spacer()
-            
-            Text(text)
-                .font(.mulish(.medium, size: 16))
-                .multilineTextAlignment(.trailing)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 200, alignment: .trailing)
-                .lineLimit(nil)
-                .contentTransition(.numericText())
-                .animation(.bouncy, value: text)
-        }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
-    }
     
-    @ViewBuilder
-    func infoRow<V: View>(
-        title: String,
-        @ViewBuilder content: () -> V
-    ) -> some View {
-        HStack(alignment: .top) {
-            Text(title)
-                .font(.mulish(.medium, size: 16))
-            
-            Spacer()
-            content()
-                .font(.mulish(.medium, size: 16))
-                .multilineTextAlignment(.trailing)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 200, alignment: .trailing)
-                .lineLimit(nil)
-                .contentTransition(.numericText())
-        }
-        .listRowBackground(Rectangle().fill(.thinMaterial))
-    }
     
     func countButton(systemImageName: String, action: @escaping () -> Void) -> some View {
         Button {
@@ -229,13 +245,5 @@ struct OrderView: View {
 }
 
 #Preview {
-    OrderView(coordinator: .init(), order: Order(
-        items: [
-            .init(product: .mockList[0])
-        ],
-        startDate: Date(),
-        endDate: Date().addingTimeInterval(3600),
-        receivingMethod: .courier(Address(city: "Kyiv", street: "Main St 123")),
-        dropoffMethod: .pickup(Address(city: "Kyiv", street: "Main St 123, 2ijsfkja awiof a afja  afjk "))
-    ), isEditable: true)
+    OrderView(coordinator: .init(), order: .mockList[0], isEditable: true)
 }

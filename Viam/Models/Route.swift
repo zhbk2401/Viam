@@ -1,11 +1,13 @@
 import Foundation
 
 enum AppRoute: Hashable {
-    case profile
+    case profile(UserInfo)
+    case editPersonalInfo(UserInfo)
+    case favorites(UserInfo)
+    case orderHistory([Order])
     case prodoctPage(Product)
-    case settings
-    case saved
-    case cart(Order)
+    case cart(UserInfo)
+    case orderDetails(Order)
 }
 
 enum FullScreenCover: Hashable, Identifiable {
