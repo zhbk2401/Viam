@@ -11,7 +11,7 @@ final class Product: Identifiable {
     var price: Double
     var category: Category
     var features: [Feature]
-    var imagesData: [Data]
+    @Attribute(.externalStorage) var imagesData: [Data]
     var countAvailable: Int
     var reservedDateRanges: [ClosedRange<Date>]
     
@@ -46,6 +46,19 @@ final class Product: Identifiable {
 }
 
 extension Product {
+    struct SeedTemplate {
+        let code: String
+        let name: String
+        let info: String
+        let price: Double
+        let category: Category
+        let features: [Feature]
+        let imageResourceNames: [String]
+        let countAvailable: Int
+    }
+
+    static let seedTemplates: [SeedTemplate] = []
+
     var images: [UIImage] {
         imagesData.compactMap { UIImage(data: $0) }
     }
