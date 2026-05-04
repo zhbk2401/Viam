@@ -21,7 +21,7 @@ struct RootView: View {
                 )
                 .overlay(alignment: .bottom) {
                     Button("Retry") {
-                        appSettings.retryBootstrap(context: modelContext)
+                        appSettings.retryBootstrap(container: modelContext.container)
                     }
                     .buttonStyle(.borderedProminent)
                     .padding()
@@ -29,7 +29,7 @@ struct RootView: View {
             } else {
                 ProgressView()
                     .task {
-                        appSettings.bootstrap(context: modelContext)
+                        appSettings.bootstrap(container: modelContext.container)
                     }
             }
         }

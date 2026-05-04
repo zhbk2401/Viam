@@ -215,27 +215,3 @@ final class Order: Identifiable {
         }
     }
 }
-
-extension Order {
-    static let mockList: [Order] = [
-        Order(
-            items: [
-                .init(product: .mockList[0])
-            ],
-            startDate: Date(),
-            endDate: Date().addingTimeInterval(3600),
-            receivingInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
-            dropoffInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
-        ),
-        
-        Order(
-            items: [
-                .init(product: .mockList[0])
-            ],
-            startDate: Date(),
-            endDate: Date().addingTimeInterval(3600),
-            receivingInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
-            dropoffInfo: .init(method: .pickup, address: Address(city: "Kyiv", street: "Main St 123")),
-        )
-    ]
-}

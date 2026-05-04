@@ -46,81 +46,6 @@ final class Product: Identifiable {
 }
 
 extension Product {
-    struct SeedTemplate {
-        let code: String
-        let name: String
-        let info: String
-        let price: Double
-        let category: Category
-        let features: [Feature]
-        let imagesData: [Data]
-        let countAvailable: Int
-    }
-
-    static let seedTemplates: [SeedTemplate] = [
-        SeedTemplate(
-            code: "hiking-backpack-30l",
-            name: "Hiking Backpack",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 129.99,
-            category: .backpacks,
-            features: [
-                Feature(.capacity, value: "30"),
-                Feature(.size, value: "XL"),
-                Feature(.batteryLife, value: "1"),
-                Feature(.brand, value: "Some Brand")
-            ],
-            imagesData: [
-                UIImage(resource: .backpack).pngData()!,
-                UIImage(resource: .backpack).pngData()!,
-                UIImage(resource: .backpack).pngData()!
-            ],
-            countAvailable: 4
-        ),
-
-        SeedTemplate(
-            code: "trail-running-shoes",
-            name: "Trail Running Shoes",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 89.99,
-            category: .clothing,
-            features: [],
-            imagesData: [
-                UIImage(resource: .roll).pngData()!,
-                UIImage(resource: .roll).pngData()!,
-                UIImage(resource: .roll).pngData()!
-            ],
-            countAvailable: 6
-        ),
-
-        SeedTemplate(
-            code: "trail-running-shoes-light",
-            name: "Trail Running Shoes",
-            info: "Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the. Backpack comfort depends on its balance while walking. The Symbium concept features an articulated hip belt that allows the pack to adapt to the.",
-            price: 89.99,
-            category: .clothing,
-            features: [],
-            imagesData: [],
-            countAvailable: 3
-        )
-    ]
-
-    static func makeSeedProducts() -> [Product] {
-        seedTemplates.map { template in
-            Product(
-                code: template.code,
-                name: template.name,
-                info: template.info,
-                price: template.price,
-                category: template.category,
-                features: template.features,
-                imagesData: template.imagesData,
-                reservedDateRanges: [],
-                countAvailable: template.countAvailable
-            )
-        }
-    }
-
     var images: [UIImage] {
         imagesData.compactMap { UIImage(data: $0) }
     }
@@ -135,9 +60,5 @@ extension Product {
         }
         
         return ordered
-    }
-    
-    static var mockList: [Product] {
-        makeSeedProducts()
     }
 }

@@ -243,7 +243,3 @@ struct OrderView: View {
         .glassEffect(.regular.interactive().tint(.secondaryAccent))
     }
 }
-
-#Preview {
-    OrderView(coordinator: .init(), order: .mockList[0], isEditable: true)
-}

@@ -14,6 +14,7 @@ final class AppSettings: ObservableObject {
     
     @Published var currentUser: UserInfo?
     @Published var bootstrapError: String?
+    @Published var isBootstrapping = false
     
     static let shared = AppSettings()
     private var didBootstrap = false
@@ -35,21 +36,34 @@ final class AppSettings: ObservableObject {
         }
     }
     
-    func bootstrap(context: ModelContext) {
-        guard !didBootstrap, bootstrapError == nil else { return }
-
-        do {
-            try ProductSeeder.seedIfNeeded(context: context)
-            try loadUser(context: context)
-            didBootstrap = true
-        } catch {
-            bootstrapError = "Failed to initialize local data: \(error.localizedDescription)"
+    @MainActor
+    func bootstrap(container: ModelContainer) {
+        guard !didBootstrap, !isBootstrapping, bootstrapError == nil else { return }
+        
+        isBootstrapping = true
+        
+        Task {
+            do {
+                // Виконуємо важкий сідинг у фоні
+                try await ProductSeeder.seedIfNeeded(container: container)
+                
+                // Завантажуємо користувача на головному потоці
+                let context = container.mainContext
+                try loadUser(context: context)
+                
+                didBootstrap = true
+                isBootstrapping = false
+            } catch {
+                bootstrapError = "Failed to initialize local data: \(error.localizedDescription)"
+                isBootstrapping = false
+            }
         }
     }
 
-    func retryBootstrap(context: ModelContext) {
+    @MainActor
+    func retryBootstrap(container: ModelContainer) {
         bootstrapError = nil
-        bootstrap(context: context)
+        bootstrap(container: container)
     }
 
     private func loadUser(context: ModelContext) throws {

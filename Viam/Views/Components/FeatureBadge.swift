@@ -10,7 +10,6 @@ struct FeatureBadge: View {
             
             Group {
                 Text(feature.value)
-                    .fixedSize()
 
                 if let unit = feature.type.unit {
                     Text(unit)

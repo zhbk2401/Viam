@@ -12,6 +12,7 @@ struct ProductCardView: View {
             Text(product.name)
                 .font(.mulish(.extraBold, size: 20))
                 .lineLimit(1)
+                .padding(.trailing, 40)
             
             PriceView(price: product.price)
             
