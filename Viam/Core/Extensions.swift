@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 //MARK: Font Extension
 extension Font {
@@ -84,8 +85,25 @@ extension View {
             .frame(maxWidth: .infinity)
             .frame(height: 48)
     }
+    
+    func dismissKeyboardOnTap() -> some View {
+        self.simultaneousGesture(
+            TapGesture().onEnded {
+                hideKeyboard()
+            }
+        )
+    }
 }
 
 extension String: @retroactive Identifiable {
     public var id: String { self }
+}
+
+func hideKeyboard() {
+    UIApplication.shared.sendAction(
+        #selector(UIResponder.resignFirstResponder),
+        to: nil,
+        from: nil,
+        for: nil
+    )
 }

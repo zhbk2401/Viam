@@ -114,7 +114,7 @@ struct HomeScreenView: View {
             Text("The following products are unavailable for the selected dates and have been removed from your cart:\n\(deletedProductsInfo)")
         }
         .onAppear {
-//            coordinator.navigate(to: .editPersonalInfo(currentUser))
+//            coordinator.navigate(to: .profile(currentUser))
         }
     }
     

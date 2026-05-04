@@ -1,4 +1,5 @@
 import SwiftUI
+import MapKit
 
 struct FulfillmentInfoView: View {
     @Binding var info: FulfillmentInfo?
@@ -62,6 +63,9 @@ struct FulfillmentInfoPickerView: View {
     @Binding var info: FulfillmentInfo
     
     @State var showMap: Bool = false
+    @State private var courierCity = ""
+    @State private var courierStreet = ""
+    @State private var courierHouseNumber = ""
     
     var filteredBranches: [Address] {
         BranchDatabase.filterBranches(in: info.address.city ?? "")
@@ -78,24 +82,47 @@ struct FulfillmentInfoPickerView: View {
                 if newValue != oldValue {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     info.address = Address()
+                    syncCourierInputsFromAddress()
                 }
             }
             .pickerStyle(.segmented)
             
-            if info.method == .pickup {
-                pickupInfo
-            } else {
-                deliveryInfo
+            Group {
+                if info.method == .pickup {
+                    pickupInfo
+                } else {
+                    deliveryInfo
+                }
+            }
+
+            Spacer(minLength: 0)
+            
+            if info.method == .courier {
+                Button {
+                    showMap = true
+                } label: {
+                    Label("Select on Map", systemImage: "map")
+                        .foregroundStyle(.white)
+                        .buttonSized()
+                }
+                .buttonStyle(.plain)
+                .glassEffect(.regular.interactive().tint(.secondaryAccent))
             }
         }
+        .animation(.bouncy, value: info.method)
         .padding()
+        .dismissKeyboardOnTap()
         .sheet(isPresented: $showMap) {
             NavigationView {
-                MapView()
+                MapView(
+                    onSelectMapItem: info.method == .courier ? { mapItem in
+                        applyMapItem(mapItem)
+                        showMap = false
+                    } : nil
+                )
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("", systemImage: "checkmark") {
-//                                info = tempInfo
                                 showMap = false
                             }
                             .buttonStyle(.borderedProminent)
@@ -110,11 +137,45 @@ struct FulfillmentInfoPickerView: View {
             }
             .presentationDetents([.large])
         }
+        .onAppear {
+            syncCourierInputsFromAddress()
+        }
     }
     
     @ViewBuilder
     var deliveryInfo: some View {
+        InputField("City") {
+            TextField("City", text: $courierCity)
+                .textFieldStyle(.plain)
+                .textInputAutocapitalization(.words)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: courierCity) { _, _ in
+                    updateAddressFromCourierInputs()
+                }
+        }
         
+        InputField("Street") {
+            TextField("Street", text: $courierStreet)
+                .textFieldStyle(.plain)
+                .textInputAutocapitalization(.words)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: courierStreet) { _, _ in
+                    updateAddressFromCourierInputs()
+                }
+        }
+        
+        InputField("House Number") {
+            TextField("House Number", text: $courierHouseNumber)
+                .textFieldStyle(.plain)
+                .textInputAutocapitalization(.never)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: courierHouseNumber) { _, _ in
+                    updateAddressFromCourierInputs()
+                }
+        }
     }
     
     @ViewBuilder
@@ -174,17 +235,38 @@ struct FulfillmentInfoPickerView: View {
             .disabled(filteredBranches.isEmpty)
             .buttonStyle(.plain)
         }
-        
-        Button {
-            showMap = true
-        } label: {
-            Label("Select on Map", systemImage: "map")
-                .foregroundStyle(.white)
-                .buttonSized()
-        }
-        .buttonStyle(.plain)
-        .glassEffect(.regular.interactive().tint(.secondaryAccent))
     }
-    
-    
+
+    private func updateAddressFromCourierInputs() {
+        info.address.city = normalized(courierCity)
+        info.address.street = normalized(courierStreet)
+        info.address.houseNumber = normalized(courierHouseNumber)
+    }
+
+    private func syncCourierInputsFromAddress() {
+        courierCity = info.address.city ?? ""
+        courierStreet = info.address.street ?? ""
+        courierHouseNumber = info.address.houseNumber ?? ""
+    }
+
+    private func applyMapItem(_ item: MKMapItem) {
+        let placemark = item.placemark
+
+        info.address.city = placemark.locality
+            ?? placemark.subAdministrativeArea
+            ?? placemark.administrativeArea
+            ?? info.address.city
+        info.address.street = placemark.thoroughfare
+            ?? placemark.name
+            ?? placemark.title
+            ?? item.name
+        info.address.houseNumber = placemark.subThoroughfare
+
+        syncCourierInputsFromAddress()
+    }
+
+    private func normalized(_ value: String) -> String? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
 }

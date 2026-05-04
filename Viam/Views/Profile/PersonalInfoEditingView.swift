@@ -65,6 +65,7 @@ struct PersonalInfoEditingView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 10)
+                    .animation(.bouncy, value: user.avatarData)
                 }
                 .buttonStyle(.plain)
                 
@@ -105,6 +106,7 @@ struct PersonalInfoEditingView: View {
                 focusedField = nil
             }
         }
+        .dismissKeyboardOnTap()
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
         .navigationTitle("Edit Personal Info")
