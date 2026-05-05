@@ -128,7 +128,7 @@ enum FeatureType: String, CaseIterable, Codable, Identifiable {
         case .soleType: "shoeprints.fill"
         case .insulationLevel: "thermometer.snowflake"
         case .fuelType: "fuelpump"
-        case .cookingCapacity: "cookingset"
+        case .cookingCapacity: "cube.transparent"
         case .foldable: "arrow.down.right.and.arrow.up.left"
         case .ecoFriendly: "leaf"
         }

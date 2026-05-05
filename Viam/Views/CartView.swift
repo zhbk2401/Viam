@@ -5,23 +5,36 @@ struct CartView: View {
     @Bindable var user: UserInfo
     
     var body: some View {
-        OrderView(order: user.cart, isEditable: true)
-            .navigationTitle("Cart")
-            .toolbar {
-                if user.cart.isComplete {
-                    Button("Confirm") {
-                        user.completeCartOrder()
-                        coordinator.goBack()
+        OrderView(order: user.cart, isEditable: true) {
+            if user.cart.isComplete {
+                Button {
+                    user.completeCartOrder()
+                    coordinator.goBack()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         coordinator.navigate(to: .orderHistory(user.orders))
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.accent)
+                } label: {
+                    Text("Checkout")
+                        .font(.mulish(.extraBold, size: 20))
+                        .ignoresSafeArea()
+                        .buttonSized()
+                        .padding(-20)
                 }
+                .foregroundStyle(.black)
+                .buttonStyle(.plain)
+                .listRowBackground(
+                    Capsule()
+                        .fill(.clear)
+                        .glassEffect(.regular.interactive().tint(.accent))
+                )
             }
-            .animation(.bouncy, value: user.cart.isComplete)
-            .onAppear {
-                checkDefaultInfo()
-            }
+        }
+        .navigationTitle("Cart")
+        .animation(.bouncy, value: user.cart.isComplete)
+        .onAppear {
+            checkDefaultInfo()
+        }
     }
     
     func checkDefaultInfo() {

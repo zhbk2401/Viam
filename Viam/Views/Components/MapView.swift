@@ -62,37 +62,39 @@ private extension MapView {
 
 private extension MapView {
     var searchResults: some View {
-        List {
-            ForEach(vm.results, id: \.self) { item in
-                Button {
-                    hideKeyboard()
-                    guard let coordinate = item.placemark.location?.coordinate else {
+        ScrollView(.vertical) {
+            VStack {
+                ForEach(vm.results, id: \.self) { item in
+                    Button {
+                        hideKeyboard()
+                        guard let coordinate = item.placemark.location?.coordinate else {
+                            onSelectMapItem?(item)
+                            return
+                        }
+                        vm.selectLocation(coordinate)
+                        vm.region.center = coordinate
                         onSelectMapItem?(item)
-                        return
+                    } label: {
+                        Text(item.name ?? "Unknown")
+                            .font(.mulish(.extraBold, size: 16))
+                            .contentShape(Rectangle())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
                     }
-                    vm.selectLocation(coordinate)
-                    vm.region.center = coordinate
-                    onSelectMapItem?(item)
-                } label: {
-                    Text(item.name ?? "Unknown")
-                        .font(.mulish(.extraBold, size: 16))
-                        .contentShape(Rectangle())
                 }
             }
-            .listRowBackground(Rectangle().fill(.clear))
+            .background {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.regularMaterial)
+                    .glassEffect(
+                        .regular.interactive(),
+                        in: RoundedRectangle(cornerRadius: 20)
+                    )
+            }
         }
-        .padding(.vertical, -30)
-        .padding(.bottom, 10)
-        .scrollContentBackground(.hidden)
         .frame(maxHeight: vm.results.isEmpty ? 0 : 300)
-        .background {
-            Rectangle()
-                .fill(.clear)
-                .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 20))
-        }
-        .clipped()
-        .padding()
-        .padding(.top, -30)
         .animation(.bouncy, value: vm.results)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .padding(.horizontal)
     }
 }

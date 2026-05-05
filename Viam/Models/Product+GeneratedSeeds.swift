@@ -375,7 +375,7 @@ extension Product {
             SeedTemplate(
                 code: "543007900",
                 name: "Sea To Summit Pocket Shower",
-                info: "The Pocket Shower is a compact 10-liter solar shower that folds into a tiny pouch for easy storage. Made from high-performance waterproof fabric, the black material effectively absorbs sunlight to heat up the water for a warm shower in the wilderness. It is an essential item for maintaining personal hygiene during multi-day expeditions in remote areas where facilities are unavailable. Featuring a simple on/off twist mechanism at the shower head, it provides a consistent and refreshing stream of water whenever you need it.",
+                info: "The Pocket Shower is a compact 10-liter solar shower that folds into a tiny pouch for easy storage. Made from high-performance waterproof fabric, the black material effectively absorbs sunligh.",
                 price: 180.0,
                 category: .waterGear,
                 features: [

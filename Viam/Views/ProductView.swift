@@ -130,7 +130,8 @@ struct ProductView: View {
                 .foregroundStyle(.secondary)
             
             if let startDate = currentUser.cart.startDate,
-               let endDate = currentUser.cart.endDate {
+               let endDate = currentUser.cart.endDate,
+               startDate <= endDate {
                 Text("Available count: \(product.availableCount(for: startDate...endDate))")
                     .font(.mulish(.medium, size: 14))
                     .foregroundStyle(.secondary)
@@ -144,27 +145,29 @@ struct ProductView: View {
             .font(.mulish(.medium, size: 16))
             .frame(maxWidth: .infinity, alignment: .leading)
             .lineLimit(showFullInfo ? nil : 5)
-            .mask {
-                LinearGradient(
-                    colors: [.primary, .primary, .primary.opacity(showFullInfo ? 1 : 0)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            }
-            .padding(.bottom, 30)
-            .overlay(alignment: .bottom) {
-                Button {
-                    withAnimation(.bouncy) {
-                        showFullInfo.toggle()
-                    }
-                } label: {
-                    Label(
-                        showFullInfo ? "Read Less" : "Read More",
-                        systemImage: showFullInfo ? "chevron.up" : "chevron.down"
+            .conditionalModifier(product.info.count >= 250) { view in
+                view.mask {
+                    LinearGradient(
+                        colors: [.primary, .primary, .primary.opacity(showFullInfo ? 1 : 0)],
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
-                    .font(.mulish(.extraBold, size: 16))
-                    .foregroundStyle(.black.opacity(0.8))
-                    .padding(5)
+                }
+                .padding(.bottom, 30)
+                .overlay(alignment: .bottom) {
+                    Button {
+                        withAnimation(.bouncy) {
+                            showFullInfo.toggle()
+                        }
+                    } label: {
+                        Label(
+                            showFullInfo ? "Read Less" : "Read More",
+                            systemImage: showFullInfo ? "chevron.up" : "chevron.down"
+                        )
+                        .font(.mulish(.extraBold, size: 16))
+                        .foregroundStyle(.black.opacity(0.8))
+                        .padding(5)
+                    }
                 }
             }
     }

@@ -25,7 +25,8 @@ struct HomeScreenView: View {
             .filter { product in
                 guard
                     let startDate = currentUser.cart.startDate,
-                    let endDate = currentUser.cart.endDate
+                    let endDate = currentUser.cart.endDate,
+                    startDate <= endDate
                 else { return true }
                 
                 return product.availableCount(for: startDate...endDate) > 0

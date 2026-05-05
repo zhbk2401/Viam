@@ -98,7 +98,7 @@ final class Order: Identifiable {
     }
     
     var daysDuration: Int? {
-        guard let startDate, let endDate else { return nil }
+        guard let startDate, let endDate, startDate <= endDate else { return nil }
         let calendar = Calendar.current
         
         let start = calendar.startOfDay(for: startDate)
@@ -181,7 +181,7 @@ final class Order: Identifiable {
     }
     
     func deleteUnavailableItems() -> [OrderItem] {
-        guard let startDate, let endDate else { return [] }
+        guard let startDate, let endDate, startDate <= endDate else { return [] }
             
         var updatedItems: [OrderItem] = []
         var deletedItems: [OrderItem] = []

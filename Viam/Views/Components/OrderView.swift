@@ -35,13 +35,27 @@ struct InlineOrderView: View {
     }
 }
 
-struct OrderView: View {
+struct OrderView<V: View>: View {
     @EnvironmentObject var coordinator: Coordinator
     @Bindable var order: Order
     @State private var deletedProductsInfo = ""
     @State private var showDeletedProductsAlert = false
     
-    var isEditable: Bool = false
+    
+    let isEditable: Bool
+    let content: (() -> V)?
+    
+    init(order: Order, isEditable: Bool = false) where V == EmptyView {
+        self.order = order
+        self.isEditable = isEditable
+        self.content = nil
+    }
+    
+    init(order: Order, isEditable: Bool = false, @ViewBuilder content: @escaping () -> V) {
+        self.order = order
+        self.isEditable = isEditable
+        self.content = content
+    }
     
     var body: some View {
         List {
@@ -71,6 +85,8 @@ struct OrderView: View {
                 InfoRow("Total Days", text: "\(order.daysDuration ?? 0)")
                 InfoRow("Total Price", text: order.totalPrice.priceFormatted())
             }
+            
+            content?()
         }
         .scrollContentBackground(.hidden)
         .gradientBackground(tinted: true)
@@ -81,15 +97,17 @@ struct OrderView: View {
             }
         }
         .onChange(of: order.startDate) { oldValue, newValue in
-            let deletedProducts = order.deleteUnavailableItems()
+            if let newValue, let end = order.endDate, newValue > end {
+                order.endDate = nil
+            }
             
+            let deletedProducts = order.deleteUnavailableItems()
             if deletedProducts.isEmpty { return }
             deletedProductsInfo = deletedProducts.toString(separator: "\n")
             showDeletedProductsAlert = true
         }
         .onChange(of: order.endDate) { oldValue, newValue in
             let deletedProducts = order.deleteUnavailableItems()
-            
             if deletedProducts.isEmpty { return }
             deletedProductsInfo = deletedProducts.toString(separator: "\n")
             showDeletedProductsAlert = true
@@ -130,15 +148,10 @@ struct OrderView: View {
             InfoRow("Start Date") {
                 DateField(date: $order.startDate, from: Date())
             }
-            .onChange(of: order.startDate) { _, newValue in
-                if let newValue, let end = order.endDate, newValue > end {
-                    order.endDate = nil
-                }
-            }
             .animation(.bouncy, value: order.startDate)
             
             InfoRow("End Date") {
-                DateField(date: $order.endDate, from: Date())
+                DateField(date: $order.endDate, from: order.startDate ?? Date())
             }
             .animation(.bouncy, value: order.endDate)
             
@@ -196,7 +209,8 @@ struct OrderView: View {
                     
                     countButton(systemImageName: "plus") {
                         guard let startDate = order.startDate,
-                              let endDate = order.endDate
+                              let endDate = order.endDate,
+                              startDate <= endDate
                         else {
                             if product.countAvailable > item.quantity {
                                 order.addProduct(product)

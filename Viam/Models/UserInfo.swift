@@ -68,7 +68,7 @@ final class UserInfo {
     func canAddToCart(_ product: Product) -> Bool {
         let currentQuantity = cart.quantityOf(product: product)
 
-        if let startDate = cart.startDate, let endDate = cart.endDate {
+        if let startDate = cart.startDate, let endDate = cart.endDate, startDate <= endDate {
             return currentQuantity < product.availableCount(for: startDate...endDate)
         }
 
@@ -91,7 +91,7 @@ final class UserInfo {
         
         orders.append(cart)
 
-        guard let startDate = cart.startDate, let endDate = cart.endDate else { return }
+        guard let startDate = cart.startDate, let endDate = cart.endDate, startDate <= endDate else { return }
         for item in cart.items {
             for _ in 0..<item.quantity {
                 item.product.reservedDateRanges.append(startDate...endDate)

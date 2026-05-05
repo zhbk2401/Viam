@@ -3,6 +3,7 @@ import SwiftUI
 struct AddToCartButton: View {
     @Environment(\.currentUser) private var currentUser
     let product: Product
+    var size: CGFloat = 36
     
     var body: some View {
         @Bindable var currentUser = currentUser
@@ -12,6 +13,7 @@ struct AddToCartButton: View {
         Button {
             if isInCart {
                 currentUser.removeFromCart(product)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } else {
                 if currentUser.addToCart(product) {
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -22,7 +24,7 @@ struct AddToCartButton: View {
         } label: {
             Image(systemName: isInCart ? "checkmark" : "plus")
                 .bold()
-                .frame(width: 36, height: 36)
+                .frame(width: size, height: size)
                 .glassEffect(.regular.interactive().tint(.accent), in: Circle())
         }
         .foregroundStyle(.black)

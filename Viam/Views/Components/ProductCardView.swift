@@ -134,10 +134,6 @@ struct CompactProductCardView: View {
         }
         .frame(width: 150, height: 150)
         .tileBackground()
-        .overlay(alignment: .topTrailing) {
-            AddToCartButton(product: product)
-                .offset(x: 10, y: -10)
-        }
         .onTapGesture {
             coordinator.navigate(to: .prodoctPage(product))
         }
