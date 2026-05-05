@@ -123,6 +123,12 @@ struct HomeScreenView: View {
             HStack {
                 Text("Viam")
                     .font(.mulish(.extraBold, size: 32))
+                    .overlay(alignment: .bottomTrailing) {
+                        Circle()
+                            .fill(.accent)
+                            .frame(width: 8, height: 8)
+                            .offset(x: 10, y: -8)
+                    }
                 Spacer()
                 
                 Button {

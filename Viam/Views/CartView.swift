@@ -13,9 +13,6 @@ struct CartView: View {
                         user.completeCartOrder()
                         coordinator.goBack()
                         coordinator.navigate(to: .orderHistory(user.orders))
-                        
-                        guard let order = user.orders.last else { return }
-                        coordinator.navigate(to: .orderDetails(order))
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.accent)

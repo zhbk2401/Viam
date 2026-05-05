@@ -1,11 +1,40 @@
 import SwiftUI
+import SwiftData
 
 struct ProductView: View {
     @Environment(\.currentUser) private var currentUser
-    @State var showActionSheet = false
-    @State var showFullInfo = false
+    @State private var showActionSheet = false
+    @State private var showFullInfo = false
     
     let product: Product
+    
+    @Query var allProducts: [Product]
+    
+    var similarProducts: [Product] {
+        allProducts.filter {
+            $0.category == product.category &&
+            $0.code != product.code
+        }
+    }
+    
+    var relatedProducts: [Product] {
+        let baseFeatures = Set(product.orderedFeatuers.map { $0.type })
+        
+        return allProducts
+            .filter {
+                $0.code != product.code &&
+                $0.category != product.category
+            }
+            .map { other in
+                let otherFeatures = Set(other.orderedFeatuers.map { $0.type })
+                let intersectionCount = baseFeatures.intersection(otherFeatures).count
+                
+                return (product: other, score: intersectionCount)
+            }
+            .sorted { $0.score > $1.score }
+            .prefix(4)
+            .map { $0.product }
+    }
     
     var body: some View {
         @Bindable var currentUser = currentUser
@@ -23,8 +52,13 @@ struct ProductView: View {
                 info
                 features
                 
-                compactProductViewRow(title: "Often taken with", products: [product, product])
-                compactProductViewRow(title: "Similar products", products: [product, product])
+                if !relatedProducts.isEmpty {
+                    compactProductViewRow(title: "Often taken with", products: relatedProducts)
+                }
+                
+                if !similarProducts.isEmpty {
+                    compactProductViewRow(title: "Similar products", products: similarProducts)
+                }
             }
             .padding()
             .frame(maxWidth: .infinity)
@@ -108,6 +142,7 @@ struct ProductView: View {
     var info: some View {
         Text(product.info)
             .font(.mulish(.medium, size: 16))
+            .frame(maxWidth: .infinity, alignment: .leading)
             .lineLimit(showFullInfo ? nil : 5)
             .mask {
                 LinearGradient(

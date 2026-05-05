@@ -9,6 +9,7 @@ struct FavoritesView: View {
         products.filter { product in
             user.favoriteProductCodes.contains(product.code)
         }
+        .reversed()
     }
     
     var body: some View {

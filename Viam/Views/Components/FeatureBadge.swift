@@ -8,15 +8,9 @@ struct FeatureBadge: View {
             Image(systemName: feature.type.systemIconName)
                 .font(.mulish(.bold, size: 14))
             
-            Group {
-                Text(feature.value)
-
-                if let unit = feature.type.unit {
-                    Text(unit)
-                }
-            }
-            .lineLimit(1)
-            .font(.mulish(.bold, size: 14))
+            Text(feature.value)
+                .lineLimit(1)
+                .font(.mulish(.bold, size: 14))
         }
         .padding(.vertical, 5)
         .padding(.horizontal, 8)

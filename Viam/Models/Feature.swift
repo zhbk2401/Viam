@@ -90,19 +90,6 @@ enum FeatureType: String, CaseIterable, Codable, Identifiable {
         }
     }
     
-    var unit: String? {
-        switch self {
-        case .weight, .maxLoad: "kg"
-        case .volume: "l"
-        case .footSize: "EU"
-        case .temperatureRating: "°C"
-        case .batteryLife, .chargingTime: "hours"
-        case .brightness: "lumens"
-        case .capacity: "people/items"
-        default: nil
-        }
-    }
-
     var systemIconName: String {
         switch self {
         case .brand: "tag"

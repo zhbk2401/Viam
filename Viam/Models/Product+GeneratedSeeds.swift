@@ -7,7 +7,7 @@ extension Product {
             SeedTemplate(
                 code: "389948589",
                 name: "Totem Summer 2 (v2) Double Tent",
-                info: "Lightweight single-layer tent perfect for summer weekend trips and outdoor relaxation. Features a mosquito net entrance and large ventilation valve. All seams are taped for extra protection.",
+                info: "This lightweight single-layer tent is specifically engineered for perfect summer weekend trips and casual outdoor relaxation. It features a high-density mosquito net entrance and a large ventilation valve to ensure optimal airflow during warm nights. All seams are precisely taped for extra protection against unexpected rain showers, while the durable Polyester Taffeta fabric provides a reliable shelter that remains extremely easy to pack and carry.",
                 price: 350.0,
                 category: .tents,
                 features: [
@@ -26,7 +26,7 @@ extension Product {
             SeedTemplate(
                 code: "582797866",
                 name: "Tramp Lite Fly 2 Single-Layer Tent",
-                info: "Reliable lightweight tent in sand color. Compact design makes it ideal for light hiking. The high-quality polyester fabric provides good protection while keeping the weight minimal.",
+                info: "A highly reliable and lightweight tent presented in an elegant sand color, designed for minimalist hikers. Its compact design makes it an ideal companion for light hiking where every gram of weight matters. The high-quality polyester fabric with specialized coating provides excellent protection against moisture while keeping the internal environment comfortable. Its streamlined shape offers great wind resistance, ensuring a stable and secure sleep in various outdoor conditions.",
                 price: 420.0,
                 category: .tents,
                 features: [
@@ -45,7 +45,7 @@ extension Product {
             SeedTemplate(
                 code: "587293630",
                 name: "Camping Pro Double Tent",
-                info: "Spacious camping tent with integrated mosquito net. Designed for maximum airflow during warm summer nights. Durable construction and easy setup make it a favorite for beginners.",
+                info: "This spacious camping tent is designed with a fully integrated mosquito net system, providing a bug-free environment for your adventures. It is engineered for maximum airflow and ventilation during warm summer nights, preventing condensation buildup. The durable construction using high-grade polyester and an intuitive color-coded pole system makes setup incredibly easy, even for beginners. It is the perfect choice for those who value comfort and simplicity in the great outdoors.",
                 price: 380.0,
                 category: .tents,
                 features: [
@@ -64,7 +64,7 @@ extension Product {
             SeedTemplate(
                 code: "3680957",
                 name: "Totem Ember Sleeping Bag",
-                info: "Warm and cozy sleeping bag for spring and summer nights. High-quality synthetic insulation ensures consistent performance even in damp conditions. Ergonomic shape for better heat retention.",
+                info: "Experience ultimate comfort with this warm and cozy sleeping bag, perfect for chilly spring and mild summer nights. The high-quality synthetic hollowfiber insulation ensures consistent thermal performance even in damp or humid conditions, unlike traditional down. Its ergonomic shape is specifically designed for better heat retention around your body, while the soft-touch lining provides a luxurious feel against the skin. It is a reliable choice for hikers who want a balanced mix of warmth and packability.",
                 price: 180.0,
                 category: .sleepingBags,
                 features: [
@@ -81,7 +81,7 @@ extension Product {
             SeedTemplate(
                 code: "3681909",
                 name: "Totem Hunter Mummy Bag",
-                info: "Professional mummy-style sleeping bag. Lightweight and highly packable, making it perfect for technical hiking. Specialized hood design traps heat effectively during cooler nights.",
+                info: "This professional mummy-style sleeping bag is a masterpiece of technical engineering, being both extremely lightweight and highly packable. It is the perfect choice for technical hiking where space in your backpack is limited. The specialized hood design with an adjustable drawstring effectively traps heat during cooler nights, while the anatomically shaped footbox provides extra room and warmth for your feet. Built with durable ripstop fabric, it is designed to withstand the rigors of frequent mountain use.",
                 price: 220.0,
                 category: .sleepingBags,
                 features: [
@@ -98,7 +98,7 @@ extension Product {
             SeedTemplate(
                 code: "446910995",
                 name: "Winter Expedition Sleeping Bag -15°C",
-                info: "Heavy-duty sleeping bag for extreme winter conditions. Thick multi-layer insulation provides warmth down to -15°C. Water-resistant outer shell protects against condensation and snow.",
+                info: "A heavy-duty sleeping bag meticulously designed for the most extreme winter conditions and mountain expeditions. The thick multi-layer synthetic mix insulation provides exceptional warmth even when temperatures drop to -15°C. A water-resistant outer shell offers a critical layer of protection against condensation and snow, keeping the interior dry and warm. Featuring an insulated draft tube along the zipper and a reinforced thermal collar, it ensures no heat escapes during the coldest nights of your journey.",
                 price: 450.0,
                 category: .sleepingBags,
                 features: [
@@ -115,7 +115,7 @@ extension Product {
             SeedTemplate(
                 code: "363662235",
                 name: "Naturehike 45L Trekking Backpack",
-                info: "Ergonomic 45-liter backpack for multi-day trips. Advanced suspension system distributes weight evenly. Durable ripstop nylon construction with integrated rain cover.",
+                info: "This ergonomic 45-liter backpack is the ultimate solution for multi-day trips and technical hikes. It features an advanced suspension system that effectively distributes weight evenly across your hips and shoulders, reducing fatigue during long marches. The durable ripstop nylon construction is reinforced at high-stress points, and the integrated rain cover ensures your gear stays bone-dry during sudden downpours. With multiple compression straps and attachment points, it easily adapts to various load sizes.",
                 price: 320.0,
                 category: .backpacks,
                 features: [
@@ -133,7 +133,7 @@ extension Product {
             SeedTemplate(
                 code: "375085551",
                 name: "Eagle A21 External Frame Pack 75L",
-                info: "Large capacity expedition backpack with external support frame. Ideal for heavy loads and long treks. Features multiple access points and specialized gear loops for ice axes or poles.",
+                info: "This large capacity 75-liter expedition backpack features a classic external support frame, making it the premier choice for carrying heavy loads and embarking on long, grueling treks. It offers unparalleled stability and ventilation between the pack and your back. The design includes multiple access points for easy gear retrieval and specialized heavy-duty gear loops for carrying ice axes or trekking poles. Built from rugged Cordura 600D fabric, it is designed to survive the harshest mountain environments.",
                 price: 480.0,
                 category: .backpacks,
                 features: [
@@ -151,7 +151,7 @@ extension Product {
             SeedTemplate(
                 code: "584337574",
                 name: "ASCE 60L Adventure Backpack",
-                info: "Versatile 60-liter backpack for various outdoor activities. Highly breathable back panel and padded shoulder straps for maximum comfort during long climbs.",
+                info: "A versatile 60-liter backpack engineered for a wide range of intense outdoor activities, from alpine climbing to extended wilderness backpacking. It features a highly breathable back panel and thick padded shoulder straps to ensure maximum comfort during steep climbs. The streamlined design minimizes snags in dense brush, while the high-quality nylon ripstop fabric provides excellent abrasion resistance. It includes a dedicated hydration sleeve and quick-access hip belt pockets for snacks and small essentials.",
                 price: 380.0,
                 category: .backpacks,
                 features: [
@@ -169,7 +169,7 @@ extension Product {
             SeedTemplate(
                 code: "540287579",
                 name: "Frontier Turun Trekking Pants",
-                info: "Durable and flexible pants designed for rough terrain. Quick-dry technology and reinforced knees provide comfort and longevity on the trail.",
+                info: "These durable and highly flexible trekking pants are specifically designed for navigating rough and unpredictable terrain. Utilizing advanced quick-dry technology and reinforced knee panels, they provide both superior comfort and incredible longevity on the trail. The four-way stretch fabric allows for a full range of motion during steep ascents, while the multiple zippered security pockets keep your navigation tools and phone safe. They are the ideal choice for serious hikers who require reliable performance in any weather.",
                 price: 150.0,
                 category: .clothing,
                 features: [
@@ -188,7 +188,7 @@ extension Product {
             SeedTemplate(
                 code: "540288069",
                 name: "Frontier Women's Gray Hiking Pants",
-                info: "Technical hiking pants tailored for women. Lightweight, breathable fabric ensures comfort during strenuous activities. Multiple secure pockets for small essentials.",
+                info: "These technical hiking pants are expertly tailored for women, offering a perfect blend of style and rugged performance. Made from lightweight, highly breathable fabric, they ensure maximum comfort during strenuous activities and hot days on the trail. The articulated knees and gusseted crotch provide exceptional freedom of movement, while the water-resistant finish helps shed light rain and dew. Featuring multiple secure pockets and an adjustable waistband, they are designed to fit perfectly and last for seasons.",
                 price: 150.0,
                 category: .clothing,
                 features: [
@@ -207,7 +207,7 @@ extension Product {
             SeedTemplate(
                 code: "583615540",
                 name: "La Sportiva D'Herens Down Jacket",
-                info: "Premium down jacket for extreme cold. Unmatched warmth-to-weight ratio. Perfect for high-altitude climbing or winter camping where every gram counts.",
+                info: "This premium down jacket is engineered for extreme cold and high-altitude environments, offering an unmatched warmth-to-weight ratio. Filled with high-loft ethically sourced down, it provides incredible thermal insulation while remaining highly compressible for storage in your pack. It is the perfect outer layer for winter camping or technical mountaineering where every gram counts. The outer nylon shell features a durable water-repellent (DWR) finish to protect against light moisture and snow, ensuring you stay dry.",
                 price: 650.0,
                 category: .clothing,
                 features: [
@@ -226,7 +226,7 @@ extension Product {
             SeedTemplate(
                 code: "580307335",
                 name: "LOWA Renegade GTX Boots",
-                info: "Iconic hiking boots known for incredible comfort and stability. Vibram sole for superior grip and Gore-Tex lining for total waterproof protection.",
+                info: "The iconic LOWA Renegade is world-renowned for providing incredible comfort and stability straight out of the box. These boots feature a high-quality leather upper paired with a waterproof Gore-Tex lining to ensure your feet stay dry in the wettest conditions. The multi-functional Vibram sole provides superior grip on everything from loose scree to wet rocks, while the specialized Monowrap frame construction provides essential support for your ankles. It is the gold standard for hikers who demand reliability and support.",
                 price: 450.0,
                 category: .footwear,
                 features: [
@@ -244,7 +244,7 @@ extension Product {
             SeedTemplate(
                 code: "589599646",
                 name: "Salomon XT-6 Advanced Trail Shoes",
-                info: "Technical trail running shoes with superior cushioning. Built for durability on long-distance technical terrain. Features the quick-lace system for a perfect fit.",
+                info: "These technical trail running shoes are built with superior cushioning and stability for the most demanding technical terrain. Originally designed for ultra-distance races, they feature a durable construction that can handle hours of intense use on rugged trails. The Salomon Quick-Lace system allows for a perfect, secure fit with a single pull, while the Contagrip sole offers aggressive traction on both wet and dry surfaces. They are the perfect choice for fast-moving hikers and trail runners who need maximum agility.",
                 price: 350.0,
                 category: .footwear,
                 features: [
@@ -262,7 +262,7 @@ extension Product {
             SeedTemplate(
                 code: "592552453",
                 name: "Lowa Innovo GTX Hiking Shoes",
-                info: "Modern, lightweight hiking shoes for mixed terrain. Combines sneaker-like agility with trekking boot protection. Gore-Tex ensures you stay dry in any weather.",
+                info: "The Lowa Innovo is a modern, lightweight hiking shoe designed for versatile performance on mixed terrain. It perfectly combines the agility and comfort of a sneaker with the protection and durability of a traditional trekking boot. The Gore-Tex membrane ensures your feet stay dry while maintaining high breathability during intense climbs. Featuring a specialized Lowa rubber sole for enhanced grip and a cushioned midsole for all-day comfort, these shoes are ideal for those who prefer a more nimble feel on the trail.",
                 price: 320.0,
                 category: .footwear,
                 features: [
@@ -280,7 +280,7 @@ extension Product {
             SeedTemplate(
                 code: "2440062",
                 name: "Tramp Stainless Steel Mug 300ml",
-                info: "Classic camping mug with foldable handles. Durable stainless steel construction that can be used directly on a stove. Lightweight and compact for any gear set.",
+                info: "This classic camping mug features ingenious foldable handles, making it incredibly easy to pack into tight spaces. The durable high-grade stainless steel construction is designed so it can be placed directly on a stove or campfire for heating liquids. It is exceptionally lightweight and compact, making it a staple piece of gear for any hiker or camper. The smooth finish is easy to clean even in the wild, and its 300ml capacity is perfect for your morning coffee or evening soup while enjoying the mountain views.",
                 price: 60.0,
                 category: .cooking,
                 features: [
@@ -296,7 +296,7 @@ extension Product {
             SeedTemplate(
                 code: "451607654",
                 name: "Tribe Silicone Collapsible Cup",
-                info: "Ultra-compact collapsible cup made of food-grade silicone. Folds flat when not in use. Ideal for fast-and-light hikers who want to save space.",
+                info: "This ultra-compact collapsible cup is made from high-quality, food-grade silicone that is both BPA-free and heat-resistant. It folds completely flat when not in use, allowing it to slide into even the smallest pocket of your backpack. It is the ideal solution for fast-and-light hikers and trail runners who want to save every possible cubic centimeter of space without sacrificing convenience. The sturdy rim ensures it keeps its shape while drinking, making it a reliable companion for hydration on the go.",
                 price: 50.0,
                 category: .cooking,
                 features: [
@@ -312,7 +312,7 @@ extension Product {
             SeedTemplate(
                 code: "547292937",
                 name: "Tribe Collapsible Bowl 600ml",
-                info: "Large silicone bowl that collapses into a flat disc. Durable construction that handles hot food with ease. Perfect for campsite dinners and easy cleanup.",
+                info: "This large 600ml silicone bowl is a game-changer for campsite dining, as it cleverly collapses into a thin, flat disc for effortless storage. The durable construction is designed to handle hot meals and soups with ease, while the reinforced base provides stability on uneven surfaces. It is perfect for everything from morning oatmeal to hearty trail dinners, and the non-stick silicone surface makes cleanup incredibly fast even with limited water. It is a must-have for any backpacker looking to streamline their kitchen kit.",
                 price: 80.0,
                 category: .cooking,
                 features: [
@@ -328,7 +328,7 @@ extension Product {
             SeedTemplate(
                 code: "421872885",
                 name: "TRIZAND Professional Compass",
-                info: "High-precision map compass with sighting mirror. Durable baseplate with various scales for accurate navigation. Essential for wilderness orientation.",
+                info: "This high-precision map compass features a professional-grade sighting mirror for accurate bearings and navigation in the wilderness. The durable acrylic baseplate includes various scales and a magnifying glass to help read even the smallest details on topographical maps. It is an essential tool for serious orientation, mountain hiking, and search and rescue operations. Equipped with a luminous needle and markings, it remains perfectly usable even in low-light conditions, ensuring you never lose your way.",
                 price: 120.0,
                 category: .navigation,
                 features: [
@@ -343,7 +343,7 @@ extension Product {
             SeedTemplate(
                 code: "364638498",
                 name: "Luxury 2886 Power Lantern",
-                info: "Powerful handheld lantern with integrated power bank function. Provides bright illumination for campsites and can charge your mobile devices in an emergency.",
+                info: "This powerful handheld lantern is more than just a light source; it features an integrated high-capacity power bank function to charge your mobile devices in an emergency. It provides exceptionally bright 800-lumen illumination that can light up an entire campsite or trail. With a long-lasting rechargeable battery and multiple light modes including a dimmable setting, it is perfect for extended camping trips. Its rugged, water-resistant housing is built to withstand the bumps and drops of outdoor life.",
                 price: 280.0,
                 category: .lighting,
                 features: [
@@ -359,7 +359,7 @@ extension Product {
             SeedTemplate(
                 code: "493023544",
                 name: "Climbing Technology Ascent Harness",
-                info: "Professional climbing harness with ergonomic padding. Multiple gear loops and highly adjustable straps for a secure and comfortable fit during climbs.",
+                info: "This professional-grade climbing harness is designed with ergonomic padding to provide maximum comfort during long multi-pitch climbs and hanging belays. It features four large gear loops for carrying a full rack and highly adjustable waist and leg straps for a secure, custom fit over different clothing layers. Built to the highest safety standards with reinforced tie-in points, it offers the peace of mind needed for challenging ascents. Its breathable mesh lining ensures you stay cool and comfortable even during intense activity.",
                 price: 380.0,
                 category: .climbing,
                 features: [
@@ -375,7 +375,7 @@ extension Product {
             SeedTemplate(
                 code: "543007900",
                 name: "Sea To Summit Pocket Shower",
-                info: "Compact 10-liter solar shower. The black material heats up water in the sun. Ideal for maintaining hygiene during multi-day expeditions in remote areas.",
+                info: "The Pocket Shower is a compact 10-liter solar shower that folds into a tiny pouch for easy storage. Made from high-performance waterproof fabric, the black material effectively absorbs sunlight to heat up the water for a warm shower in the wilderness. It is an essential item for maintaining personal hygiene during multi-day expeditions in remote areas where facilities are unavailable. Featuring a simple on/off twist mechanism at the shower head, it provides a consistent and refreshing stream of water whenever you need it.",
                 price: 180.0,
                 category: .waterGear,
                 features: [
@@ -391,7 +391,7 @@ extension Product {
             SeedTemplate(
                 code: "434770868",
                 name: "Camotec Extreme Winter Suit",
-                info: "Heavy-duty insulated suit for extreme cold. Designed for winter camping and high-altitude activities. Provides a complete thermal barrier against snow and ice.",
+                info: "This heavy-duty insulated suit is the ultimate defense against extreme cold and sub-zero temperatures, specifically designed for winter camping and high-altitude mountaineering. It provides a complete thermal barrier using advanced synthetic insulation that maintains its warmth even if it gets damp. The outer fabric is engineered to be windproof and highly water-resistant, protecting you from blowing snow and ice. With reinforced high-wear areas and multiple thermal pockets, it is built to keep you safe and functional in the harshest winter environments.",
                 price: 850.0,
                 category: .winterGear,
                 features: [
@@ -407,7 +407,7 @@ extension Product {
             SeedTemplate(
                 code: "539198434",
                 name: "Tribe Stainless Steel Canteen",
-                info: "Classic outdoor canteen for water storage. Durable stainless steel body that is easy to clean and practically indestructible. A sustainable alternative to plastic bottles.",
+                info: "This classic outdoor canteen is the perfect solution for durable and safe water storage on any adventure. Its high-grade stainless steel body is virtually indestructible and incredibly easy to clean, ensuring your water always tastes fresh and free of plastic odors. It is a sustainable, eco-friendly alternative to single-use plastic bottles that will last for a lifetime of use. The wide mouth allows for easy filling and cleaning, while the secure cap prevents any leaks in your pack, making it a reliable staple for every hiker's gear kit.",
                 price: 140.0,
                 category: .accessories,
                 features: [
