@@ -7,7 +7,7 @@ struct AddToCartButton: View {
     var body: some View {
         @Bindable var currentUser = currentUser
         
-        let isInCart = currentUser.cart.items.contains(where: { $0.product.id == product.id })
+        let isInCart = currentUser.cart.items.contains(where: { $0.product.code == product.code })
 
         Button {
             if isInCart {

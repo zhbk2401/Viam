@@ -59,8 +59,7 @@ struct OrderView: View {
                     view
                         .onDelete { indexSet in
                             for index in indexSet {
-                                let item = order.nonEmptyItems[index]
-                                order.removeProduct(item.product)
+                                order.items.remove(at: index)
                             }
                        }
                 }

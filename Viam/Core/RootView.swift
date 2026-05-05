@@ -12,6 +12,7 @@ struct RootView: View {
         Group {
             if let user = appSettings.currentUser {
                 rootContent
+                    .transition(.blurReplace)
                     .environment(\.currentUser, user)
             } else if let error = appSettings.bootstrapError {
                 ContentUnavailableView(
@@ -27,7 +28,7 @@ struct RootView: View {
                     .padding()
                 }
             } else {
-                ProgressView()
+                Color.clear
                     .task {
                         appSettings.bootstrap(container: modelContext.container)
                     }

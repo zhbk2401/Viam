@@ -48,7 +48,7 @@ struct ProductView: View {
             
             ToolbarItemGroup(placement: .bottomBar) {
                 
-                let isAddedToCart = currentUser.cart.items.contains(where: { $0.product == product })
+                let isAddedToCart = currentUser.cart.items.contains(where: { $0.product.code == product.code })
                 
                 Button {
                     if isAddedToCart {
